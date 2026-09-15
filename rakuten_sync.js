@@ -1,15 +1,18 @@
 /**
  * ネイルピタ お悩み別ランキングページ 商品データ連携バッチ(楽天版)
  * GitHub Secrets: RAKUTEN_APP_ID / RAKUTEN_ACCESS_KEY / RAKUTEN_AFFILIATE_ID
+ * 必要なライブラリ: npm install undici
+ * (fetchはOrigin/Refererヘッダを送れないため、undiciを直接使用)
  */
 
 const fs = require('fs');
-const https = require('https');
+const { request: undiciRequest } = require('undici');
 
 const OUTPUT_PATH = 'products.json';
 const APP_ID = process.env.RAKUTEN_APP_ID;
 const ACCESS_KEY = process.env.RAKUTEN_ACCESS_KEY;
 const AFFILIATE_ID = process.env.RAKUTEN_AFFILIATE_ID;
+const SITE_ORIGIN = process.env.RAKUTEN_SITE_ORIGIN || 'https://nailpita.github.io';
 
 if (!APP_ID || !ACCESS_KEY) {
   console.error('RAKUTEN_APP_ID または RAKUTEN_ACCESS_KEY が設定されていません。');
@@ -27,58 +30,62 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// https モジュールで直接リクエスト(fetchのReferer制限を回避)
-function httpsGet(url, headers) {
-  return new Promise((resolve, reject) => {
-    const req = https.get(url, { headers }, (res) => {
-      let body = '';
-      res.on('data', (chunk) => { body += chunk; });
-      res.on('end', () => resolve({ status: res.statusCode, body }));
-    });
-    req.on('error', reject);
-  });
-}
+async function fetchRakutenProducts(keyword, hits, retriesLeft = 2) {
+  const endpoint = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701';
+  const paramsObj = {
+    applicationId: APP_ID,
+    accessKey: ACCESS_KEY,
+    keyword,
+    hits: String(hits),
+    sort: '-reviewCount',
+    format: 'json',
+    formatVersion: '2',
+  };
+  if (AFFILIATE_ID) paramsObj.affiliateId = AFFILIATE_ID;
+  const params = new URLSearchParams(paramsObj);
+  const url = `${endpoint}?${params.toString()}`;
 
-async function fetchRakutenProducts(keyword, hits) {
-  const url = new URL('https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701');
-  url.searchParams.set('applicationId', APP_ID);
-  url.searchParams.set('accessKey', ACCESS_KEY);
-  if (AFFILIATE_ID) url.searchParams.set('affiliateId', AFFILIATE_ID);
-  url.searchParams.set('keyword', keyword);
-  url.searchParams.set('hits', String(hits));
-  url.searchParams.set('sort', '-reviewCount');
-  url.searchParams.set('format', 'json');
-  url.searchParams.set('formatVersion', '2');
-
-  const { status, body } = await httpsGet(url.toString(), {
-    'Referer': 'https://nailpita.github.io/',
-    'User-Agent': 'Mozilla/5.0 (compatible; NailPitaBot/1.0)',
+  const { statusCode, body } = await undiciRequest(url, {
+    method: 'GET',
+    headers: {
+      'User-Agent': 'nailpita/1.0',
+      Origin: SITE_ORIGIN,
+      Referer: SITE_ORIGIN,
+      accessKey: ACCESS_KEY,
+    },
   });
+
+  const rawText = await body.text();
+
+  if (statusCode === 429 && retriesLeft > 0) {
+    console.log(`  レート制限のため2秒待って再試行します(残り${retriesLeft}回)`);
+    await sleep(2000);
+    return fetchRakutenProducts(keyword, hits, retriesLeft - 1);
+  }
 
   let data;
   try {
-    data = JSON.parse(body);
+    data = JSON.parse(rawText);
   } catch {
-    throw new Error(`JSONとして解析できない応答(HTTP ${status}): ${body.slice(0, 200)}`);
+    throw new Error(`JSONとして解析できない応答(HTTP ${statusCode}): ${rawText.slice(0, 200)}`);
   }
 
-  if (data.error || data.errors) {
-    const msg = data.error_description || (data.errors && JSON.stringify(data.errors)) || data.error;
-    throw new Error(`楽天APIエラー(HTTP ${status}): ${msg}`);
+  if (statusCode < 200 || statusCode >= 300) {
+    const msg = data.errorMessage || (data.errors && JSON.stringify(data.errors)) || rawText.slice(0, 200);
+    throw new Error(`楽天APIエラー(HTTP ${statusCode}): ${msg}`);
   }
 
   const count = typeof data.count === 'number' ? data.count : '不明';
-  console.log(`    (HTTPステータス:${status} / API上のヒット件数:${count})`);
-  if (count === '不明') {
-    console.log(`    応答の中身: ${JSON.stringify(data).slice(0, 300)}`);
-  }
+  console.log(`    (HTTPステータス:${statusCode} / API上のヒット件数:${count})`);
 
   return (data.Items || []).map((entry) => {
     const Item = entry.Item || entry;
+    const firstImage = Item.mediumImageUrls && Item.mediumImageUrls[0];
+    const rawImageUrl = typeof firstImage === 'string' ? firstImage : firstImage && firstImage.imageUrl;
     return {
       name: Item.itemName,
       price: Item.itemPrice,
-      imageUrl: (Item.mediumImageUrls && Item.mediumImageUrls[0] && (Item.mediumImageUrls[0].imageUrl || Item.mediumImageUrls[0])) || '',
+      imageUrl: (rawImageUrl || '').replace('?_ex=128x128', ''),
       url: Item.affiliateUrl || Item.itemUrl,
     };
   });
