@@ -19,9 +19,10 @@ const fs = require('fs');
 
 const OUTPUT_PATH = 'products.json';
 
-const APP_ID = process.env.RAKUTEN_APP_ID;
-const ACCESS_KEY = process.env.RAKUTEN_ACCESS_KEY;
-const AFFILIATE_ID = process.env.RAKUTEN_AFFILIATE_ID;
+// ここに直接IDを書き込みます(GitHub Secretsの登録は不要になります)
+const APP_ID = "f7caa972-8b81-4802-bf69-685db23b1cc2";
+const ACCESS_KEY = "pk_8EFRkS01yZEuhfqqkUk40Q8SwERCt3GksswB1QoBcJd";
+const AFFILIATE_ID = "56f04eff.04cce6cb.56f04f00.fedc8c9c";
 
 // お悩みカテゴリと検索キーワード(ここを編集すればカテゴリの追加・変更ができる)
 const WORRY_CATEGORIES = [
@@ -59,11 +60,6 @@ async function fetchRakutenProducts(keyword, hits) {
 
 // --- 実行本体 ---
 async function runBatch() {
-  if (!APP_ID || !ACCESS_KEY || !AFFILIATE_ID) {
-    console.error('RAKUTEN_APP_ID / RAKUTEN_ACCESS_KEY / RAKUTEN_AFFILIATE_ID を環境変数に設定してください');
-    process.exit(1);
-  }
-
   const categories = {};
 
   for (const category of WORRY_CATEGORIES) {
