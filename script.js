@@ -16,28 +16,28 @@ const WORRY_CATEGORIES = [
     id: "sujime",
     label: "爪の縦すじ・凸凹",
     lead: "今すぐ隠したい、根本からなめらかにしたい",
-    keyword: "ネイル ベースコート 凹凸 補正",
+    keyword: "ベースコート",
     hits: 4
   },
   {
     id: "nimaizume",
     label: "爪が薄い・二枚爪",
     lead: "水仕事や乾燥から爪を守り、補強したい",
-    keyword: "ネイル ハードナー 爪 補強",
+    keyword: "ネイルオイル",
     hits: 4
   },
   {
     id: "teshiwa",
     label: "手のシワ・乾燥",
     lead: "手の甲や指先の年齢感をケアしたい",
-    keyword: "ハンドクリーム エイジングケア 保湿",
+    keyword: "ハンドクリーム",
     hits: 4
   },
   {
     id: "shokuba",
     label: "職場でバレたくない",
     lead: "派手にならず、清潔感のある指先にしたい",
-    keyword: "ネイル マット ベースコート 自爪風",
+    keyword: "マットネイル",
     hits: 4
   }
 ];
