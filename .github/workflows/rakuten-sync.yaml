@@ -2,14 +2,14 @@ name: 楽天商品データ自動更新
 
 on:
   schedule:
-    # 毎日 日本時間の朝6時ごろに実行(UTC 21:00)
     - cron: '0 21 * * *'
   workflow_dispatch: {}
-    # ↑ GitHubの画面から手動実行もできるようにするための設定
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: リポジトリを取得
         uses: actions/checkout@v4
@@ -19,15 +19,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 必要なライブラリをインストール
-        run: npm install node-fetch
-
       - name: 楽天商品データを取得して products.json を更新
+        run: node rakuten_sync.js
         env:
           RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
           RAKUTEN_ACCESS_KEY: ${{ secrets.RAKUTEN_ACCESS_KEY }}
           RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
-        run: node rakuten_sync.js
 
       - name: 更新結果をコミット
         run: |
