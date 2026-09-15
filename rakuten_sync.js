@@ -1,35 +1,87 @@
-name: 楽天商品データ自動更新
+/**
+ * ネイルピタ お悩み別ランキングページ 商品データ連携バッチ(楽天版)
+ * GitHub Secrets: RAKUTEN_APP_ID / RAKUTEN_ACCESS_KEY / RAKUTEN_AFFILIATE_ID
+ * Node.js 18以降は fetch 標準搭載のため追加ライブラリ不要
+ */
 
-on:
-  schedule:
-    - cron: '0 21 * * *'
-  workflow_dispatch: {}
+const fs = require('fs');
 
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: リポジトリを取得
-        uses: actions/checkout@v4
+const OUTPUT_PATH = 'products.json';
+const APP_ID = process.env.RAKUTEN_APP_ID;
+const ACCESS_KEY = process.env.RAKUTEN_ACCESS_KEY;
+const AFFILIATE_ID = process.env.RAKUTEN_AFFILIATE_ID;
 
-      - name: Node.jsをセットアップ
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+if (!APP_ID || !ACCESS_KEY) {
+  console.error('RAKUTEN_APP_ID または RAKUTEN_ACCESS_KEY が設定されていません。');
+  process.exit(1);
+}
 
-      - name: 楽天商品データを取得して products.json を更新
-        run: node rakuten_sync.js
-        env:
-          RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
-          RAKUTEN_ACCESS_KEY: ${{ secrets.RAKUTEN_ACCESS_KEY }}
-          RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
+const WORRY_CATEGORIES = [
+  { id: 'sujime', label: '爪の縦すじ・凸凹', keyword: 'ベースコート', hits: 4 },
+  { id: 'nimaizume', label: '爪が薄い・二枚爪', keyword: 'ネイルオイル', hits: 4 },
+  { id: 'teshiwa', label: '手のシワ・乾燥', keyword: 'ハンドクリーム', hits: 4 },
+  { id: 'shokuba', label: '職場でバレたくない', keyword: 'マットネイル', hits: 4 },
+];
 
-      - name: 更新結果をコミット
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add products.json
-          git diff --quiet --cached || git commit -m "商品データを自動更新"
-          git push
+async function fetchRakutenProducts(keyword, hits) {
+  const url = new URL('https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701');
+  url.searchParams.set('applicationId', APP_ID);
+  url.searchParams.set('accessKey', ACCESS_KEY);
+  if (AFFILIATE_ID) url.searchParams.set('affiliateId', AFFILIATE_ID);
+  url.searchParams.set('keyword', keyword);
+  url.searchParams.set('hits', String(hits));
+  url.searchParams.set('sort', '-reviewCount');
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('formatVersion', '2');
+
+  const res = await fetch(url.toString());
+  const rawText = await res.text();
+
+  let data;
+  try {
+    data = JSON.parse(rawText);
+  } catch {
+    throw new Error(`JSONとして解析できない応答(HTTP ${res.status}): ${rawText.slice(0, 200)}`);
+  }
+
+  if (data.error) {
+    throw new Error(`楽天APIエラー(HTTP ${res.status}): ${data.error} - ${data.error_description || ''}`);
+  }
+
+  const count = typeof data.count === 'number' ? data.count : '不明';
+  console.log(`    (HTTPステータス:${res.status} / API上のヒット件数:${count})`);
+
+  return (data.Items || []).map((entry) => {
+    const Item = entry.Item || entry;
+    return {
+      name: Item.itemName,
+      price: Item.itemPrice,
+      imageUrl: (Item.mediumImageUrls && Item.mediumImageUrls[0] && (Item.mediumImageUrls[0].imageUrl || Item.mediumImageUrls[0])) || '',
+      url: Item.affiliateUrl || Item.itemUrl,
+    };
+  });
+}
+
+async function runBatch() {
+  const categories = {};
+  let hasError = false;
+
+  for (const category of WORRY_CATEGORIES) {
+    console.log(`--- 「${category.label}」(${category.keyword})を検索中 ---`);
+    try {
+      categories[category.id] = await fetchRakutenProducts(category.keyword, category.hits || 4);
+      console.log(`  → ${categories[category.id].length}件取得`);
+    } catch (err) {
+      console.error(`  カテゴリ処理エラー(${category.label}): ${err.message}`);
+      categories[category.id] = [];
+      hasError = true;
+    }
+  }
+
+  fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), categories }, null, 2));
+  console.log(`完了: ${OUTPUT_PATH} を更新しました`);
+
+  if (hasError) process.exitCode = 1;
+}
+
+runBatch();
