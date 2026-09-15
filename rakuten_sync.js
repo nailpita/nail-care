@@ -9,12 +9,11 @@
  * 実行イメージ:
  *   RAKUTEN_APP_ID=xxx RAKUTEN_ACCESS_KEY=yyy RAKUTEN_AFFILIATE_ID=zzz node rakuten_sync.js
  *
- * 必要なライブラリ: npm install node-fetch
+ * ※ Node.js 18以降は fetch が標準搭載のため、node-fetchのインストールは不要
  *
  * 出力: products.json (お悩みカテゴリごとに商品リストをまとめたもの)
  */
 
-const fetch = require('node-fetch');
 const fs = require('fs');
 
 const OUTPUT_PATH = 'products.json';
