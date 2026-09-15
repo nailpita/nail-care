@@ -1,10 +1,10 @@
 /**
  * ネイルピタ お悩み別ランキングページ 商品データ連携バッチ(楽天版)
  * GitHub Secrets: RAKUTEN_APP_ID / RAKUTEN_ACCESS_KEY / RAKUTEN_AFFILIATE_ID
- * Node.js 18以降は fetch 標準搭載のため追加ライブラリ不要
  */
 
 const fs = require('fs');
+const https = require('https');
 
 const OUTPUT_PATH = 'products.json';
 const APP_ID = process.env.RAKUTEN_APP_ID;
@@ -27,6 +27,18 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// https モジュールで直接リクエスト(fetchのReferer制限を回避)
+function httpsGet(url, headers) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, { headers }, (res) => {
+      let body = '';
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', () => resolve({ status: res.statusCode, body }));
+    });
+    req.on('error', reject);
+  });
+}
+
 async function fetchRakutenProducts(keyword, hits) {
   const url = new URL('https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701');
   url.searchParams.set('applicationId', APP_ID);
@@ -38,30 +50,28 @@ async function fetchRakutenProducts(keyword, hits) {
   url.searchParams.set('format', 'json');
   url.searchParams.set('formatVersion', '2');
 
-    const res = await fetch(url.toString(), {
-    referrer: 'https://nailpita.github.io/',
-    referrerPolicy: 'unsafe-url',
+  const { status, body } = await httpsGet(url.toString(), {
+    'Referer': 'https://nailpita.github.io/',
+    'User-Agent': 'Mozilla/5.0 (compatible; NailPitaBot/1.0)',
   });
-
-  const rawText = await res.text();
 
   let data;
   try {
-    data = JSON.parse(rawText);
+    data = JSON.parse(body);
   } catch {
-    throw new Error(`JSONとして解析できない応答(HTTP ${res.status}): ${rawText.slice(0, 200)}`);
+    throw new Error(`JSONとして解析できない応答(HTTP ${status}): ${body.slice(0, 200)}`);
   }
 
-  if (data.error) {
-    throw new Error(`楽天APIエラー(HTTP ${res.status}): ${data.error} - ${data.error_description || ''}`);
+  if (data.error || data.errors) {
+    const msg = data.error_description || (data.errors && JSON.stringify(data.errors)) || data.error;
+    throw new Error(`楽天APIエラー(HTTP ${status}): ${msg}`);
   }
 
-    const count = typeof data.count === 'number' ? data.count : '不明';
-  console.log(`    (HTTPステータス:${res.status} / API上のヒット件数:${count})`);
+  const count = typeof data.count === 'number' ? data.count : '不明';
+  console.log(`    (HTTPステータス:${status} / API上のヒット件数:${count})`);
   if (count === '不明') {
     console.log(`    応答の中身: ${JSON.stringify(data).slice(0, 300)}`);
   }
-
 
   return (data.Items || []).map((entry) => {
     const Item = entry.Item || entry;
@@ -88,7 +98,7 @@ async function runBatch() {
       categories[category.id] = [];
       hasError = true;
     }
-    await sleep(1000); // 429対策:各カテゴリの間に1秒待つ
+    await sleep(1000);
   }
 
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), categories }, null, 2));
