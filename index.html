@@ -7,238 +7,53 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #F7F4EF;
-    --bg-card: #FFFFFF;
-    --border: #E4DDD1;
-    --text: #3A2E28;
-    --text-soft: #6B5D51;
-    --accent: #A97C58;
-    --accent-deep: #7C5A3D;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans JP', sans-serif;
-    line-height: 1.8;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .wrap {
-    max-width: 920px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  /* ---------- HERO ---------- */
-  header.hero {
-    padding: 88px 0 72px;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .hero-eyebrow {
-    font-family: 'Noto Serif JP', serif;
-    font-size: 14px;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    margin-bottom: 20px;
-  }
-
-  .hero h1 {
-    font-family: 'Noto Serif JP', serif;
-    font-weight: 500;
-    font-size: clamp(28px, 5vw, 42px);
-    line-height: 1.5;
-    max-width: 620px;
-    margin: 0 auto 24px;
-  }
-
-  .hero p {
-    color: var(--text-soft);
-    font-size: 15px;
-    max-width: 480px;
-    margin: 0 auto;
-    line-height: 2;
-  }
-
-  /* ---------- NAV (worry index) ---------- */
-  nav.index {
-    padding: 40px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  nav.index ul {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-  }
-
-  nav.index a {
-    display: inline-block;
-    padding: 9px 18px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--text-soft);
-    text-decoration: none;
-    font-size: 13px;
-    transition: border-color 0.2s ease, color 0.2s ease;
-  }
-
-  nav.index a:hover {
-    border-color: var(--accent);
-    color: var(--accent-deep);
-  }
-
-  /* ---------- WORRY SECTIONS ---------- */
-  section.worry {
-    padding: 64px 0;
-    border-bottom: 1px solid var(--border);
-    scroll-margin-top: 24px;
-  }
-
-  section.worry:last-of-type {
-    border-bottom: none;
-  }
-
-  .worry-head {
-    margin-bottom: 32px;
-  }
-
-  .worry-label {
-    font-size: 12px;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    margin-bottom: 10px;
-  }
-
-  .worry-head h2 {
-    font-family: 'Noto Serif JP', serif;
-    font-weight: 500;
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-
-  .worry-head p {
-    color: var(--text-soft);
-    font-size: 14px;
-    max-width: 60ch;
-  }
-
-  .items {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-  }
-
-  .item-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .item-card img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    background: #F0EBE3;
-    display: block;
-  }
-
-  .item-body {
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    flex: 1;
-  }
-
-  .item-name {
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--text);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    min-height: 3.9em;
-  }
-
-  .item-price {
-    font-family: 'Noto Serif JP', serif;
-    font-size: 17px;
-    color: var(--accent-deep);
-  }
-
-  .item-cta {
-    margin-top: auto;
-    display: inline-block;
-    text-align: center;
-    padding: 10px 0;
-    border: 1px solid var(--accent);
-    color: var(--accent-deep);
-    text-decoration: none;
-    font-size: 13px;
-    border-radius: 999px;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-
-  .item-cta:hover {
-    background: var(--accent);
-    color: #fff;
-  }
-
-  .placeholder-card {
-    border: 1px dashed var(--border);
-    border-radius: 4px;
-    padding: 24px;
-    color: var(--text-soft);
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 180px;
-  }
-
-  /* ---------- FOOTER ---------- */
-  footer {
-    padding: 56px 0 88px;
-    text-align: center;
-  }
-
-  footer p {
-    font-size: 12px;
-    color: var(--text-soft);
-    margin-bottom: 6px;
-  }
-
-  /* ---------- CONFIG NOTICE ---------- */
-  .config-banner {
-    background: #FBF4EC;
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--accent-deep);
-  }
-
-  @media (max-width: 560px) {
-    header.hero { padding: 64px 0 48px; }
-    section.worry { padding: 48px 0; }
-  }
+:root {
+  --bg: #F7F4EF;
+  --bg-card: #FFFFFF;
+  --border: #E4DDD1;
+  --text: #3A2E28;
+  --text-soft: #6B5D51;
+  --accent: #A97C58;
+  --accent-deep: #7C5A3D;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+header.hero { padding: 88px 0 72px; text-align: center; border-bottom: 1px solid var(--border); }
+.hero-eyebrow { font-family: 'Noto Serif JP', serif; font-size: 14px; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 20px; }
+.hero h1 { font-family: 'Noto Serif JP', serif; font-weight: 500; font-size: clamp(28px, 5vw, 42px); line-height: 1.5; max-width: 620px; margin: 0 auto 24px; }
+.hero p { color: var(--text-soft); font-size: 15px; max-width: 480px; margin: 0 auto; line-height: 2; }
+nav.index { padding: 40px 0; border-bottom: 1px solid var(--border); }
+nav.index ul { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+nav.index a { display: inline-block; padding: 9px 18px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-soft); text-decoration: none; font-size: 13px; transition: border-color 0.2s ease, color 0.2s ease; }
+nav.index a:hover { border-color: var(--accent); color: var(--accent-deep); }
+section.worry { padding: 64px 0; border-bottom: 1px solid var(--border); scroll-margin-top: 24px; }
+section.worry:last-of-type { border-bottom: none; }
+.worry-head { margin-bottom: 32px; }
+.worry-label { font-size: 12px; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 10px; }
+.worry-head h2 { font-family: 'Noto Serif JP', serif; font-weight: 500; font-size: 24px; margin-bottom: 10px; }
+.worry-head p { color: var(--text-soft); font-size: 14px; max-width: 60ch; }
+.items { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.item-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; }
+.item-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #F0EBE3; display: block; }
+.item-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.item-name { font-size: 13px; line-height: 1.6; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.9em; }
+.item-price { font-family: 'Noto Serif JP', serif; font-size: 17px; color: var(--accent-deep); }
+.item-cta { margin-top: auto; display: inline-block; text-align: center; padding: 10px 0; border: 1px solid var(--accent); color: var(--accent-deep); text-decoration: none; font-size: 13px; border-radius: 999px; transition: background 0.2s ease, color 0.2s ease; }
+.item-cta:hover { background: var(--accent); color: #fff; }
+.placeholder-card { border: 1px dashed var(--border); border-radius: 4px; padding: 24px; color: var(--text-soft); font-size: 13px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 180px; grid-column: 1 / -1; }
+footer { padding: 56px 0 88px; text-align: center; }
+footer p { font-size: 12px; color: var(--text-soft); margin-bottom: 6px; }
+@media (max-width: 560px) { header.hero { padding: 64px 0 48px; } section.worry { padding: 48px 0; } }
 </style>
 </head>
 <body>
-
 <header class="hero">
   <div class="wrap">
     <div class="hero-eyebrow">NAIL PITA</div>
@@ -247,11 +62,7 @@
   </div>
 </header>
 
-<nav class="index">
-  <div class="wrap">
-    <ul id="worryIndex"></ul>
-  </div>
-</nav>
+<nav class="index"><div class="wrap"><ul id="worryIndex"></ul></div></nav>
 
 <main class="wrap" id="worrySections"></main>
 
