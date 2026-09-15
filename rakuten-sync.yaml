@@ -19,9 +19,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 必要なライブラリをインストール
-        run: npm install node-fetch@2
-
       - name: 楽天商品データを取得して products.json を更新
         run: node rakuten_sync.js
         env:
