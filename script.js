@@ -5,6 +5,7 @@
 
 /* ---------- ① ここにご自身のIDを入力してください ---------- */
 const APP_ID = "f7caa972-8b81-4802-bf69-685db23b1cc2";
+const ACCESS_KEY = "pk_8EFRkS01yZEuhfqqkUk40Q8SwERCt3GksswB1QoBcJd";
 const AFFILIATE_ID = "56f04eff.04cce6cb.56f04f00.fedc8c9c";
 
 /* ---------- ② お悩みカテゴリ設定 ----------
@@ -109,8 +110,16 @@ function fetchRakutenItems(category, container) {
     delete window[callbackName];
     script.remove();
 
+    if (data && data.errors) {
+      renderPlaceholder(
+        container,
+        "APIエラー: " + JSON.stringify(data.errors)
+      );
+      return;
+    }
+
     if (!data || !data.Items || data.Items.length === 0) {
-      renderPlaceholder(container, "商品が見つかりませんでした。キーワードを見直してください。");
+      renderPlaceholder(container, "商品が見つかりませんでした(該当0件)。キーワードを見直してください。");
       return;
     }
     renderItems(container, data.Items);
@@ -122,13 +131,14 @@ function fetchRakutenItems(category, container) {
     hits: String(category.hits || 4),
     sort: "-reviewCount",
     applicationId: APP_ID,
+    accessKey: ACCESS_KEY,
     affiliateId: AFFILIATE_ID,
     callback: callbackName
   });
 
   const script = document.createElement("script");
   script.src =
-    "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?" +
+    "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601?" +
     params.toString();
   script.onerror = function () {
     renderPlaceholder(container, "商品の取得に失敗しました。IDの設定をご確認ください。");
