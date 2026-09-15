@@ -1,55 +1,39 @@
 /* =========================================================
    ネイルピタ お悩み別ランキングページ
-   楽天商品検索API(IchibaItem/Search)連携スクリプト
+   products.json(GitHub Actionsが定期更新)を読み込んで表示する方式
+   ブラウザから楽天APIを直接呼ばないため、Referer/CORS関連の
+   エラーが発生しない。
    ========================================================= */
 
-/* ---------- ① ここにご自身のIDを入力してください ---------- */
-const APP_ID = "f7caa972-8b81-4802-bf69-685db23b1cc2";
-const ACCESS_KEY = "pk_8EFRkS01yZEuhfqqkUk40Q8SwERCt3GksswB1QoBcJd";
-const AFFILIATE_ID = "56f04eff.04cce6cb.56f04f00.fedc8c9c";
-
-/* ---------- ② お悩みカテゴリ設定 ----------
-   ラベル・説明文・検索キーワードを自由に編集/追加できます。
-   keyword は楽天市場の商品検索に使うワードです。 */
-const WORRY_CATEGORIES = [
+/* ---------- お悩みカテゴリの表示設定 ----------
+   ここでの id は、rakuten_sync.js の WORRY_CATEGORIES の id と
+   一致させる必要があります(products.json 側のキーと対応するため)。 */
+const CATEGORY_META = [
   {
     id: "sujime",
     label: "爪の縦すじ・凸凹",
-    lead: "今すぐ隠したい、根本からなめらかにしたい",
-    keyword: "ベースコート",
-    hits: 4
+    lead: "今すぐ隠したい、根本からなめらかにしたい"
   },
   {
     id: "nimaizume",
     label: "爪が薄い・二枚爪",
-    lead: "水仕事や乾燥から爪を守り、補強したい",
-    keyword: "ネイルオイル",
-    hits: 4
+    lead: "水仕事や乾燥から爪を守り、補強したい"
   },
   {
     id: "teshiwa",
     label: "手のシワ・乾燥",
-    lead: "手の甲や指先の年齢感をケアしたい",
-    keyword: "ハンドクリーム",
-    hits: 4
+    lead: "手の甲や指先の年齢感をケアしたい"
   },
   {
     id: "shokuba",
     label: "職場でバレたくない",
-    lead: "派手にならず、清潔感のある指先にしたい",
-    keyword: "マットネイル",
-    hits: 4
+    lead: "派手にならず、清潔感のある指先にしたい"
   }
 ];
 
-/* ---------- ③ 以下は自動処理(基本的に編集不要) ---------- */
-
 const worrySectionsEl = document.getElementById("worrySections");
 const worryIndexEl = document.getElementById("worryIndex");
-
-const isConfigured =
-  APP_ID && APP_ID.indexOf("ここに") === -1 &&
-  AFFILIATE_ID && AFFILIATE_ID.indexOf("ここに") === -1;
+const sectionContainers = {};
 
 function formatPrice(price) {
   return "¥" + Number(price).toLocaleString("ja-JP");
@@ -64,16 +48,13 @@ function renderPlaceholder(container, message) {
 
 function renderItems(container, items) {
   container.innerHTML = "";
-  items.forEach((wrapper) => {
-    const item = wrapper.Item;
+  items.forEach((item) => {
     const card = document.createElement("div");
     card.className = "item-card";
 
     const img = document.createElement("img");
-    img.src =
-      (item.mediumImageUrls && item.mediumImageUrls[0] && item.mediumImageUrls[0].imageUrl) ||
-      "";
-    img.alt = item.itemName;
+    img.src = item.imageUrl || "";
+    img.alt = item.name;
     card.appendChild(img);
 
     const body = document.createElement("div");
@@ -81,17 +62,17 @@ function renderItems(container, items) {
 
     const name = document.createElement("div");
     name.className = "item-name";
-    name.textContent = item.itemName;
+    name.textContent = item.name;
     body.appendChild(name);
 
     const price = document.createElement("div");
     price.className = "item-price";
-    price.textContent = formatPrice(item.itemPrice);
+    price.textContent = formatPrice(item.price);
     body.appendChild(price);
 
     const cta = document.createElement("a");
     cta.className = "item-cta";
-    cta.href = item.affiliateUrl || item.itemUrl;
+    cta.href = item.url;
     cta.target = "_blank";
     cta.rel = "noopener noreferrer sponsored";
     cta.textContent = "詳しく見る";
@@ -102,52 +83,8 @@ function renderItems(container, items) {
   });
 }
 
-/* JSONPで楽天APIを呼び出す(ブラウザからの直接fetchはCORSで弾かれるため) */
-function fetchRakutenItems(category, container) {
-  const callbackName = "rakutenCallback_" + category.id;
-
-  window[callbackName] = function (data) {
-    delete window[callbackName];
-    script.remove();
-
-    if (data && data.errors) {
-      renderPlaceholder(
-        container,
-        "APIエラー: " + JSON.stringify(data.errors)
-      );
-      return;
-    }
-
-    if (!data || !data.Items || data.Items.length === 0) {
-      renderPlaceholder(container, "商品が見つかりませんでした(該当0件)。キーワードを見直してください。");
-      return;
-    }
-    renderItems(container, data.Items);
-  };
-
-  const params = new URLSearchParams({
-    format: "json",
-    keyword: category.keyword,
-    hits: String(category.hits || 4),
-    sort: "-reviewCount",
-    applicationId: APP_ID,
-    accessKey: ACCESS_KEY,
-    affiliateId: AFFILIATE_ID,
-    callback: callbackName
-  });
-
-  const script = document.createElement("script");
-  script.src =
-    "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601?" +
-    params.toString();
-  script.onerror = function () {
-    renderPlaceholder(container, "商品の取得に失敗しました。IDの設定をご確認ください。");
-  };
-  document.body.appendChild(script);
-}
-
-/* ---------- ページ組み立て ---------- */
-WORRY_CATEGORIES.forEach((category) => {
+/* ---------- ページの土台(ナビ+各お悩みセクション)を組み立てる ---------- */
+CATEGORY_META.forEach((category) => {
   // ナビ
   const navLi = document.createElement("li");
   const navA = document.createElement("a");
@@ -175,14 +112,36 @@ WORRY_CATEGORIES.forEach((category) => {
   section.appendChild(itemsContainer);
 
   worrySectionsEl.appendChild(section);
+  sectionContainers[category.id] = itemsContainer;
 
-  if (isConfigured) {
-    renderPlaceholder(itemsContainer, "読み込み中…");
-    fetchRakutenItems(category, itemsContainer);
-  } else {
-    renderPlaceholder(
-      itemsContainer,
-      "APP_ID / AFFILIATE_ID を設定すると、ここに商品が自動表示されます"
-    );
-  }
+  renderPlaceholder(itemsContainer, "読み込み中…");
 });
+
+/* ---------- products.json を読み込んで表示する ---------- */
+fetch("./products.json", { cache: "no-store" })
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error("products.json が見つかりません(HTTP " + res.status + ")");
+    }
+    return res.json();
+  })
+  .then((data) => {
+    const categories = data.categories || {};
+    CATEGORY_META.forEach((category) => {
+      const container = sectionContainers[category.id];
+      const items = categories[category.id] || [];
+      if (items.length === 0) {
+        renderPlaceholder(container, "現在準備中です。しばらくお待ちください。");
+        return;
+      }
+      renderItems(container, items);
+    });
+  })
+  .catch((err) => {
+    CATEGORY_META.forEach((category) => {
+      renderPlaceholder(
+        sectionContainers[category.id],
+        "商品データの読み込みに失敗しました: " + err.message
+      );
+    });
+  });
