@@ -1,34 +1,21 @@
 /**
  * ネイルピタ お悩み別ランキングページ 商品データ連携バッチ(楽天版)
- *
- * 必要なもの(GitHub Secretsに設定):
- *   1. RAKUTEN_APP_ID       … 楽天ウェブサービスのアプリケーションID
- *   2. RAKUTEN_ACCESS_KEY   … 楽天ウェブサービスのアクセスキー
- *   3. RAKUTEN_AFFILIATE_ID … 楽天アフィリエイトID
- *
- * 実行イメージ:
- *   RAKUTEN_APP_ID=xxx RAKUTEN_ACCESS_KEY=yyy RAKUTEN_AFFILIATE_ID=zzz node rakuten_sync.js
- *
- * ※ Node.js 18以降は fetch が標準搭載のため、node-fetchのインストールは不要
- *
- * 出力: products.json (お悩みカテゴリごとに商品リストをまとめたもの)
+ * GitHub Secrets: RAKUTEN_APP_ID / RAKUTEN_ACCESS_KEY / RAKUTEN_AFFILIATE_ID
+ * Node.js 18以降は fetch 標準搭載のため追加ライブラリ不要
  */
 
 const fs = require('fs');
 
 const OUTPUT_PATH = 'products.json';
-
-// キーはコードに書かず、GitHub Secrets経由の環境変数から読む
 const APP_ID = process.env.RAKUTEN_APP_ID;
 const ACCESS_KEY = process.env.RAKUTEN_ACCESS_KEY;
 const AFFILIATE_ID = process.env.RAKUTEN_AFFILIATE_ID;
 
 if (!APP_ID || !ACCESS_KEY) {
-  console.error('RAKUTEN_APP_ID または RAKUTEN_ACCESS_KEY が設定されていません。GitHub Secretsを確認してください。');
+  console.error('RAKUTEN_APP_ID または RAKUTEN_ACCESS_KEY が設定されていません。');
   process.exit(1);
 }
 
-// お悩みカテゴリと検索キーワード(ここを編集すればカテゴリの追加・変更ができる)
 const WORRY_CATEGORIES = [
   { id: 'sujime', label: '爪の縦すじ・凸凹', keyword: 'ベースコート', hits: 4 },
   { id: 'nimaizume', label: '爪が薄い・二枚爪', keyword: 'ネイルオイル', hits: 4 },
@@ -36,7 +23,6 @@ const WORRY_CATEGORIES = [
   { id: 'shokuba', label: '職場でバレたくない', keyword: 'マットネイル', hits: 4 },
 ];
 
-// --- 楽天商品検索APIから商品を取得(2026-07-01版エンドポイント) ---
 async function fetchRakutenProducts(keyword, hits) {
   const url = new URL('https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701');
   url.searchParams.set('applicationId', APP_ID);
@@ -49,15 +35,24 @@ async function fetchRakutenProducts(keyword, hits) {
   url.searchParams.set('formatVersion', '2');
 
   const res = await fetch(url.toString());
-  const data = await res.json();
+  const rawText = await res.text();
 
-  // 楽天APIのエラーは単数形 "error" フィールドで返る
+  let data;
+  try {
+    data = JSON.parse(rawText);
+  } catch {
+    throw new Error(`JSONとして解析できない応答(HTTP ${res.status}): ${rawText.slice(0, 200)}`);
+  }
+
   if (data.error) {
     throw new Error(`楽天APIエラー(HTTP ${res.status}): ${data.error} - ${data.error_description || ''}`);
   }
 
+  const count = typeof data.count === 'number' ? data.count : '不明';
+  console.log(`    (HTTPステータス:${res.status} / API上のヒット件数:${count})`);
+
   return (data.Items || []).map((entry) => {
-    const Item = entry.Item || entry; // formatVersion=2はネストなしで返る
+    const Item = entry.Item || entry;
     return {
       name: Item.itemName,
       price: Item.itemPrice,
@@ -67,7 +62,6 @@ async function fetchRakutenProducts(keyword, hits) {
   });
 }
 
-// --- 実行本体 ---
 async function runBatch() {
   const categories = {};
   let hasError = false;
@@ -78,24 +72,16 @@ async function runBatch() {
       categories[category.id] = await fetchRakutenProducts(category.keyword, category.hits || 4);
       console.log(`  → ${categories[category.id].length}件取得`);
     } catch (err) {
-      console.error(`  カテゴリ処理エラー(${category.label}):`, err.message);
+      console.error(`  カテゴリ処理エラー(${category.label}): ${err.message}`);
       categories[category.id] = [];
       hasError = true;
     }
   }
 
-  const output = {
-    updatedAt: new Date().toISOString(),
-    categories,
-  };
-
-  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2));
+  fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), categories }, null, 2));
   console.log(`完了: ${OUTPUT_PATH} を更新しました`);
 
-  // 1件でもエラーがあればCI側で気づけるように異常終了させる
-  if (hasError) {
-    process.exitCode = 1;
-  }
+  if (hasError) process.exitCode = 1;
 }
 
 runBatch();
