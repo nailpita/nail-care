@@ -23,10 +23,6 @@ jobs:
         run: npm install node-fetch
 
       - name: 楽天商品データを取得して products.json を更新
-        env:
-          RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
-          RAKUTEN_ACCESS_KEY: ${{ secrets.RAKUTEN_ACCESS_KEY }}
-          RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
         run: node rakuten_sync.js
 
       - name: 更新結果をコミット
