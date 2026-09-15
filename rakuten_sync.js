@@ -23,6 +23,10 @@ const WORRY_CATEGORIES = [
   { id: 'shokuba', label: '職場でバレたくない', keyword: 'マットネイル', hits: 4 },
 ];
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function fetchRakutenProducts(keyword, hits) {
   const url = new URL('https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701');
   url.searchParams.set('applicationId', APP_ID);
@@ -35,10 +39,11 @@ async function fetchRakutenProducts(keyword, hits) {
   url.searchParams.set('formatVersion', '2');
 
   const res = await fetch(url.toString(), {
-  headers: {
-    'Referer': 'https://nailpita.github.io/',
-  },
-});
+    headers: {
+      'Referer': 'https://nailpita.github.io/',
+      'User-Agent': 'Mozilla/5.0 (compatible; NailPitaBot/1.0)',
+    },
+  });
   const rawText = await res.text();
 
   let data;
@@ -80,6 +85,7 @@ async function runBatch() {
       categories[category.id] = [];
       hasError = true;
     }
+    await sleep(1000); // 429対策:各カテゴリの間に1秒待つ
   }
 
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), categories }, null, 2));
