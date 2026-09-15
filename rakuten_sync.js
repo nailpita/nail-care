@@ -43,7 +43,11 @@ async function fetchRakutenProducts(keyword, hits) {
   url.searchParams.set('sort', '-reviewCount');
   url.searchParams.set('format', 'json');
 
-  const res = await fetch(url.toString());
+  const res = await fetch(url.toString(), {
+    headers: {
+      Referer: 'https://nailpita.github.io/nail-care/',
+    },
+  });
   const data = await res.json();
 
   if (data.errors) {
