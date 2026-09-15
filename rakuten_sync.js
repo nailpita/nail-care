@@ -57,8 +57,12 @@ async function fetchRakutenProducts(keyword, hits) {
     throw new Error(`楽天APIエラー(HTTP ${res.status}): ${data.error} - ${data.error_description || ''}`);
   }
 
-  const count = typeof data.count === 'number' ? data.count : '不明';
+    const count = typeof data.count === 'number' ? data.count : '不明';
   console.log(`    (HTTPステータス:${res.status} / API上のヒット件数:${count})`);
+  if (count === '不明') {
+    console.log(`    応答の中身: ${JSON.stringify(data).slice(0, 300)}`);
+  }
+
 
   return (data.Items || []).map((entry) => {
     const Item = entry.Item || entry;
