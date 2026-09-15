@@ -45,15 +45,10 @@ const WORRY_CATEGORIES = [
 
 const worrySectionsEl = document.getElementById("worrySections");
 const worryIndexEl = document.getElementById("worryIndex");
-const configBannerEl = document.getElementById("configBanner");
 
 const isConfigured =
   APP_ID && APP_ID.indexOf("ここに") === -1 &&
   AFFILIATE_ID && AFFILIATE_ID.indexOf("ここに") === -1;
-
-if (isConfigured && configBannerEl) {
-  configBannerEl.style.display = "none";
-}
 
 function formatPrice(price) {
   return "¥" + Number(price).toLocaleString("ja-JP");
