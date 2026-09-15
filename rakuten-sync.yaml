@@ -2,10 +2,8 @@ name: 楽天商品データ自動更新
 
 on:
   schedule:
-    # 毎日 日本時間の朝6時ごろに実行(UTC 21:00)
     - cron: '0 21 * * *'
   workflow_dispatch: {}
-    # ↑ GitHubの画面から手動実行もできるようにするための設定
 
 jobs:
   sync:
