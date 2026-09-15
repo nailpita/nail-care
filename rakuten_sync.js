@@ -34,7 +34,11 @@ async function fetchRakutenProducts(keyword, hits) {
   url.searchParams.set('format', 'json');
   url.searchParams.set('formatVersion', '2');
 
-  const res = await fetch(url.toString());
+  const res = await fetch(url.toString(), {
+  headers: {
+    'Referer': 'https://nailpita.github.io/',
+  },
+});
   const rawText = await res.text();
 
   let data;
