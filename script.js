@@ -1,8 +1,24 @@
 const CATEGORY_META = [
-  { id: "sujime", label: "爪の縦すじ・凸凹", lead: "今すぐ隠したい、根本からなめらかにしたい" },
-  { id: "nimaizume", label: "爪が薄い・二枚爪", lead: "水仕事や乾燥から爪を守り、補強したい" },
-  { id: "teshiwa", label: "手のシワ・乾燥", lead: "手の甲や指先の年齢感をケアしたい" },
-  { id: "shokuba", label: "職場でバレたくない", lead: "派手にならず、清潔感のある指先にしたい" },
+  {
+    id: "sujime",
+    label: "爪の縦すじ・凸凹",
+    lead: "爪甲縦条(そうこうじゅうじょう)とも呼ばれる縦線・でこぼこ。今すぐ隠したい、根本からなめらかにしたい方へ"
+  },
+  {
+    id: "nimaizume",
+    label: "爪が薄い・二枚爪",
+    lead: "水仕事や乾燥で割れやすくなった爪を補修・補強。二枚爪を繰り返さない爪づくりへ"
+  },
+  {
+    id: "teshiwa",
+    label: "手のシワ・乾燥",
+    lead: "手の甲や指先に出る老け手サイン。エイジングによる乾燥・シワが気になる方のハンドケア"
+  },
+  {
+    id: "shokuba",
+    label: "職場でバレたくない",
+    lead: "派手にならず清潔感のある指先に。オフィスでも浮かないさりげないネイルケア"
+  },
 ];
 
 const worryIndexEl = document.getElementById("worryIndex");
