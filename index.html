@@ -12,35 +12,163 @@
 <meta property="og:url" content="https://nailpita.github.io/nail-care/">
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #F7F4EF;
-  --bg-card: #FFFFFF;
-  --border: #E4DDD1;
-  --text: #3A2E28;
-  --text-soft: #6B5D51;
-  --accent: #A97C58;
-  --accent-deep: #7C5A3D;
+  --bg: #FBF4EC;
+  --bg-alt: #F4E4D4;
+  --card: #FFFFFF;
+  --border: #EEDFCD;
+  --border-strong: #E8D9C7;
+  --text: #4A362C;
+  --text-soft: #5A4436;
+  --text-mute: #A98A6F;
+  --accent: #B25C42;
+  --accent-deep: #8A4A37;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Noto Sans JP', sans-serif;
-  line-height: 1.8;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  line-height: 1.9;
   -webkit-font-smoothing: antialiased;
 }
-.wrap { max-width: 920px; margin: 0 auto; padding: 0 24px; }
-header.hero { padding: 88px 0 72px; text-align: center; border-bottom: 1px solid var(--border); }
-.hero-eyebrow { font-family: 'Noto Serif JP', serif; font-size: 14px; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 20px; }
-.hero h1 { font-family: 'Noto Serif JP', serif; font-weight: 500; font-size: clamp(28px, 5vw, 42px); line-height: 1.5; max-width: 620px; margin: 0 auto 16px; }
-.hero-sub { color: var(--text-soft); font-size: 14px; max-width: 520px; margin: 0 auto 20px; }
-.hero p.hero-lead { color: var(--text-soft); font-size: 15px; max-width: 480px; margin: 0 auto; line-height: 2; }
-nav.index { padding: 40px 0; border-bottom: 1px solid var(--border); }
-nav.index ul { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-nav.index a { display: inline-block; padding: 9px 18px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-soft); text-decoration: none; font-size: 13px; transition: border-color 0.2s ease, color 0.2s ease; }
-nav.index a:hover { border-color: var(--accent); color: var(--accent-deep); }
-section.worry { padding: 64px 0; border-bottom: 1px solid var(--border); scroll-margin-top: 24px; }
-section.worry:last-of-type { border-bottom: none; }
-.worry-head { margin-bottom
+h1, h2, h3 { font-family: 'Shippori Mincho', serif; }
+a { text-decoration: none; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* Header */
+header.site { background: var(--bg); border-bottom: 1px solid var(--border-strong); }
+header.site .wrap { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; flex-wrap: wrap; gap: 12px; }
+.logo { display: flex; align-items: baseline; gap: 10px; }
+.logo-main { font-size: 20px; font-weight: 700; color: var(--text); }
+.logo-sub { font-size: 11px; color: var(--text-mute); }
+nav.site-nav { display: flex; gap: 22px; font-size: 13px; }
+nav.site-nav a { color: var(--text); }
+
+/* Hero / About */
+section.about { background: var(--bg-alt); }
+section.about .wrap { display: flex; align-items: center; gap: 48px; padding: 64px 24px; flex-wrap: wrap; }
+.avatar-wrap { flex: 0 0 200px; }
+.avatar-wrap img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; display: block; background: var(--border); }
+.about-body { flex: 1; min-width: 260px; }
+.eyebrow { font-size: 12px; letter-spacing: 0.12em; color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+.about-body h1 { font-size: clamp(26px, 4vw, 36px); color: var(--text); margin-bottom: 18px; line-height: 1.5; }
+.about-body p { font-size: 14.5px; color: var(--text-soft); max-width: 520px; margin-bottom: 20px; }
+.cta-btn { display: inline-block; padding: 13px 26px; background: var(--accent); color: #fff; border-radius: 30px; font-size: 13.5px; font-weight: 700; }
+
+/* Hand-care banner */
+.banner { width: 100%; height: 220px; overflow: hidden; }
+.banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Worries grid nav */
+section.worries-nav { background: var(--bg); }
+section.worries-nav .wrap { padding: 64px 24px; }
+.section-head { text-align: center; margin-bottom: 36px; }
+.section-head .eyebrow { display: block; }
+.section-head h2 { font-size: 26px; color: var(--text); }
+.worry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+.worry-card { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; color: var(--text); transition: border-color 0.2s ease; }
+.worry-card:hover { border-color: var(--accent); }
+.worry-card svg { stroke: var(--accent); }
+.worry-card span { font-size: 13px; font-weight: 700; text-align: center; }
+
+/* Detail sections */
+section.worry-detail { background: var(--bg-alt); border-top: 1px solid var(--border-strong); scroll-margin-top: 20px; }
+section.worry-detail:nth-of-type(even) { background: var(--bg); }
+section.worry-detail .wrap { padding: 64px 24px; }
+.story-card { background: var(--card); border-radius: 20px; padding: 36px; max-width: 720px; margin: 0 auto 40px; }
+.story-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.story-head img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.story-head .who { font-size: 13px; font-weight: 700; color: var(--text); }
+.story-head .role { font-size: 11px; color: var(--text-mute); }
+.story-label { font-size: 12px; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.story-card h3 { font-size: 22px; color: var(--text); margin-bottom: 16px; }
+.story-card p.body-text { font-size: 14.5px; color: var(--text-soft); margin-bottom: 14px; }
+.tip-box { background: var(--bg-alt); border-radius: 12px; padding: 16px 18px; margin-top: 18px; }
+section.worry-detail:nth-of-type(even) .tip-box { background: var(--bg-alt); }
+.tip-box p.tip-label { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.tip-box p.tip-body { font-size: 13.5px; color: var(--text-soft); }
+
+.items-label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; text-align: center; }
+.items { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.item-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+.item-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: var(--bg-alt); display: block; }
+.item-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.item-name { font-size: 13px; line-height: 1.6; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.9em; }
+.item-price { font-family: 'Shippori Mincho', serif; font-size: 16px; color: var(--accent-deep); }
+.item-cta { margin-top: auto; display: inline-block; text-align: center; padding: 9px 0; border: 1px solid var(--accent); color: var(--accent-deep); text-decoration: none; font-size: 12.5px; border-radius: 999px; }
+.placeholder-card { border: 1px dashed var(--border); border-radius: 16px; padding: 24px; color: var(--text-mute); font-size: 13px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 160px; grid-column: 1 / -1; }
+
+footer.site { background: var(--text); color: #EFE1D2; }
+footer.site .wrap { padding: 44px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+footer.site .brand { font-family: 'Shippori Mincho', serif; font-size: 17px; margin-bottom: 4px; }
+footer.site .tagline { font-size: 12px; color: #C9B49C; }
+footer.site .credit { font-size: 11.5px; color: var(--text-mute); }
+
+@media (max-width: 640px) {
+  section.about .wrap { flex-direction: column; text-align: center; }
+  .about-body p { margin-left: auto; margin-right: auto; }
+  .story-card { padding: 26px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <div class="logo">
+      <span class="logo-main">ネイルピタ</span>
+      <span class="logo-sub">40代50代の手元ケア習慣</span>
+    </div>
+    <nav class="site-nav">
+      <a href="#about">けいについて</a>
+      <a href="#worries">お悩みから探す</a>
+    </nav>
+  </div>
+</header>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="avatar-wrap">
+      <img src="assets/founder.jpg" alt="けい">
+    </div>
+    <div class="about-body">
+      <p class="eyebrow">はじめまして、けいです</p>
+      <h1>幾つになっても楽しめるネイルと、<br>悩みに寄り添うケアを。</h1>
+      <p>ネイルサロンを続ける中で、爪の縦すじや乾燥、二枚爪といった"大人の指先悩み"と、私自身も日々向き合っています。「もう歳だから」で諦めたくなかった。同じように悩むあなたに、私が実際に試して良かったものだけをお届けします。</p>
+      <a href="#worries" class="cta-btn">私の指先の悩みを見てみる</a>
+    </div>
+  </div>
+</section>
+
+<div class="banner">
+  <img src="assets/hand-care.jpg" alt="ハンドケアのイメージ">
+</div>
+
+<section class="worries-nav" id="worries">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">お悩み</span>
+      <h2>あなたの指先、どのお悩みですか?</h2>
+    </div>
+    <div class="worry-grid" id="worryGrid"></div>
+  </div>
+</section>
+
+<main id="worrySections"></main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>
+      <p class="brand">ネイルピタ</p>
+      <p class="tagline">何歳になっても、指先をあきらめない。</p>
+    </div>
+    <p class="credit">本ページで紹介する商品はアフィリエイトプログラムを利用して紹介しています。<br>&copy; ネイルピタ / けい</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
