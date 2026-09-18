@@ -11,6 +11,7 @@ const ICONS = {
 
 const MAX_ITEMS_PER_CATEGORY = 3;
 
+
 const PICKS = {
   tatesuji: [
     {
