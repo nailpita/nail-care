@@ -3,6 +3,8 @@
  * GitHub Secrets: RAKUTEN_APP_ID / RAKUTEN_ACCESS_KEY / RAKUTEN_AFFILIATE_ID
  * 必要なライブラリ: npm install undici
  * (fetchはOrigin/Refererヘッダを送れないため、undiciを直接使用)
+ *
+ * ※「職場でバレたくない」は手動選定のみのため、この自動検索の対象外です(script.js側で管理)
  */
 
 const fs = require('fs');
@@ -19,11 +21,14 @@ if (!APP_ID || !ACCESS_KEY) {
   process.exit(1);
 }
 
+// カテゴリごとに複数キーワードで検索し、マージして上位を採用する
 const WORRY_CATEGORIES = [
-  { id: 'sujime', label: '爪の縦すじ・凸凹', keyword: 'ベースコート', hits: 4 },
-  { id: 'nimaizume', label: '爪が薄い・二枚爪', keyword: 'ネイルオイル', hits: 4 },
-  { id: 'teshiwa', label: '手のシワ・乾燥', keyword: 'ハンドクリーム', hits: 4 },
-  { id: 'shokuba', label: '職場でバレたくない', keyword: 'マットネイル', hits: 4 },
+  { id: 'sujime', label: '縦すじ・凹凸', keywords: ['ネイル 補強コート', 'ネイルオイル'], hitsEach: 4 },
+  { id: 'nimaizume', label: '二枚爪・薄い爪', keywords: ['二枚爪 補修', 'ネイルオイル 爪 補強'], hitsEach: 4 },
+  { id: 'sasakure', label: 'ささくれ', keywords: ['ささくれ ケア', 'キューティクルオイル'], hitsEach: 4 },
+  { id: 'teshiwa', label: '手のシワ・乾燥', keywords: ['ハンドクリーム 尿素', 'ハンドクリーム エイジングケア'], hitsEach: 4 },
+  { id: 'fukazume', label: '深爪・噛み癖', keywords: ['爪 ガラスファイル', 'ネイルオイル ペンタイプ', '育爪'], hitsEach: 4 },
+  { id: 'makizume', label: '巻き爪', keywords: ['巻き爪 ケア', '巻き爪 クリップ', '巻き爪'], hitsEach: 4 },
 ];
 
 function sleep(ms) {
@@ -58,7 +63,7 @@ async function fetchRakutenProducts(keyword, hits, retriesLeft = 2) {
   const rawText = await body.text();
 
   if (statusCode === 429 && retriesLeft > 0) {
-    console.log(`  レート制限のため2秒待って再試行します(残り${retriesLeft}回)`);
+    console.log('  レート制限のため2秒待って再試行します');
     await sleep(2000);
     return fetchRakutenProducts(keyword, hits, retriesLeft - 1);
   }
@@ -96,16 +101,29 @@ async function runBatch() {
   let hasError = false;
 
   for (const category of WORRY_CATEGORIES) {
-    console.log(`--- 「${category.label}」(${category.keyword})を検索中 ---`);
-    try {
-      categories[category.id] = await fetchRakutenProducts(category.keyword, category.hits || 4);
-      console.log(`  → ${categories[category.id].length}件取得`);
-    } catch (err) {
-      console.error(`  カテゴリ処理エラー(${category.label}): ${err.message}`);
-      categories[category.id] = [];
-      hasError = true;
+    console.log(`--- 「${category.label}」を検索中 ---`);
+    const merged = [];
+    const seenNames = new Set();
+
+    for (const keyword of category.keywords) {
+      console.log(`  キーワード:「${keyword}」`);
+      try {
+        const items = await fetchRakutenProducts(keyword, category.hitsEach || 4);
+        for (const item of items) {
+          if (!seenNames.has(item.name)) {
+            seenNames.add(item.name);
+            merged.push(item);
+          }
+        }
+      } catch (err) {
+        console.error(`  キーワード処理エラー(${keyword}): ${err.message}`);
+        hasError = true;
+      }
+      await sleep(1000);
     }
-    await sleep(1000);
+
+    categories[category.id] = merged.slice(0, 8);
+    console.log(`  → 合計${categories[category.id].length}件`);
   }
 
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), categories }, null, 2));
