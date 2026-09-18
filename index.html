@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ネイルピタ | 40代50代の手元ケア習慣</title>
-<meta name="description" content="爪の縦すじ・でこぼこ・二枚爪・手の甲のシワなど、40代50代から増える指先の老化サインをケア。爪甲縦条や老け手が気になる方へ、悩み別におすすめジェルカラー&ケアアイテムをご紹介。">
+<meta name="description" content="爪の縦すじ・でこぼこ・二枚爪・手の甲のシワ・ささくれ・深爪・巻き爪など、40代50代から増える指先の老化サインをケア。爪甲縦条や老け手が気になる方へ、悩み別におすすめジェルカラー&ケアアイテムをご紹介。">
 <meta name="google-site-verification" content="fTiN5ONsfGfMuDdtScl3MJups67DtgfAXP_2-65v3HM" />
 <meta property="og:title" content="ネイルピタ | 40代50代の手元ケア習慣">
 <meta property="og:description" content="爪の縦すじ・二枚爪・手のシワなど、指先の悩み別ケアアイテム紹介サイト">
@@ -38,7 +38,6 @@ h1, h2, h3 { font-family: 'Shippori Mincho', serif; }
 a { text-decoration: none; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
-/* Header */
 header.site { background: var(--bg); border-bottom: 1px solid var(--border-strong); }
 header.site .wrap { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; flex-wrap: wrap; gap: 12px; }
 .logo { display: flex; align-items: baseline; gap: 10px; }
@@ -47,70 +46,76 @@ header.site .wrap { display: flex; align-items: center; justify-content: space-b
 nav.site-nav { display: flex; gap: 22px; font-size: 13px; }
 nav.site-nav a { color: var(--text); }
 
-/* Hero / About */
 section.about { background: var(--bg-alt); }
-section.about .wrap { display: flex; align-items: center; gap: 48px; padding: 64px 24px; flex-wrap: wrap; }
-.avatar-wrap { flex: 0 0 200px; }
+section.about .wrap { display: flex; align-items: flex-start; gap: 48px; padding: 64px 24px; flex-wrap: wrap; }
+.avatar-wrap { flex: 0 0 200px; position: sticky; top: 24px; }
 .avatar-wrap img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; display: block; background: var(--border); }
 .about-body { flex: 1; min-width: 260px; }
-.eyebrow { font-size: 12px; letter-spacing: 0.12em; color: var(--accent); font-weight: 700; margin-bottom: 12px; }
-.about-body h1 { font-size: clamp(26px, 4vw, 36px); color: var(--text); margin-bottom: 18px; line-height: 1.5; }
-.about-body p { font-size: 14.5px; color: var(--text-soft); max-width: 520px; margin-bottom: 20px; }
-.cta-btn { display: inline-block; padding: 13px 26px; background: var(--accent); color: #fff; border-radius: 30px; font-size: 13.5px; font-weight: 700; }
+.eyebrow { font-size: 12px; letter-spacing: 0.12em; color: var(--accent); font-weight: 700; margin-bottom: 16px; }
+.about-body p { font-size: 14.5px; color: var(--text-soft); max-width: 600px; margin-bottom: 16px; }
+.about-body p.lead { font-family: 'Shippori Mincho', serif; font-size: 17px; color: var(--text); }
+.worry-list { list-style: none; max-width: 600px; margin: 4px 0 20px; padding: 14px 18px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); }
+.worry-list li { font-size: 14px; color: var(--text-soft); padding: 3px 0; }
+.cta-btn { display: inline-block; padding: 13px 26px; background: var(--accent); color: #fff; border-radius: 30px; font-size: 13.5px; font-weight: 700; margin-top: 10px; }
 
-/* Hand-care banner */
 .banner { width: 100%; height: 220px; overflow: hidden; }
 .banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* Worries grid nav */
 section.worries-nav { background: var(--bg); }
 section.worries-nav .wrap { padding: 64px 24px; }
 .section-head { text-align: center; margin-bottom: 36px; }
-.section-head .eyebrow { display: block; }
-.section-head h2 { font-size: 26px; color: var(--text); }
-.worry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
-.worry-card { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; color: var(--text); transition: border-color 0.2s ease; }
+.section-head h2 { font-size: 24px; color: var(--text); }
+.worry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; }
+.worry-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; color: var(--text); }
 .worry-card:hover { border-color: var(--accent); }
 .worry-card svg { stroke: var(--accent); }
-.worry-card span { font-size: 13px; font-weight: 700; text-align: center; }
+.worry-card span { font-size: 12.5px; font-weight: 700; text-align: center; }
 
-/* Detail sections */
 section.worry-detail { background: var(--bg-alt); border-top: 1px solid var(--border-strong); scroll-margin-top: 20px; }
 section.worry-detail:nth-of-type(even) { background: var(--bg); }
-section.worry-detail .wrap { padding: 64px 24px; }
-.story-card { background: var(--card); border-radius: 20px; padding: 36px; max-width: 720px; margin: 0 auto 40px; }
-.story-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.story-head img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+section.worry-detail .wrap { padding: 60px 24px; }
+.story-card { background: var(--card); border-radius: 20px; padding: 32px; max-width: 720px; margin: 0 auto 36px; }
+.story-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.story-head img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 .story-head .who { font-size: 13px; font-weight: 700; color: var(--text); }
 .story-head .role { font-size: 11px; color: var(--text-mute); }
 .story-label { font-size: 12px; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
-.story-card h3 { font-size: 22px; color: var(--text); margin-bottom: 16px; }
-.story-card p.body-text { font-size: 14.5px; color: var(--text-soft); margin-bottom: 14px; }
-.tip-box { background: var(--bg-alt); border-radius: 12px; padding: 16px 18px; margin-top: 18px; }
+.story-card h3 { font-size: 20px; color: var(--text); margin-bottom: 14px; }
+.story-card p.body-text { font-size: 14px; color: var(--text-soft); margin-bottom: 12px; }
+.tip-box { background: var(--bg-alt); border-radius: 12px; padding: 15px 17px; margin-top: 16px; }
 section.worry-detail:nth-of-type(even) .tip-box { background: var(--bg-alt); }
-.tip-box p.tip-label { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-.tip-box p.tip-body { font-size: 13.5px; color: var(--text-soft); }
+.tip-box p.tip-label { font-size: 12.5px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.tip-box p.tip-body { font-size: 13px; color: var(--text-soft); }
 
-.items-label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; text-align: center; }
-.items { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.pick-label, .items-label { font-size: 13.5px; font-weight: 700; color: var(--text); margin: 24px 0 12px; text-align: center; }
+.pick-badge { display: inline-block; background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; margin-bottom: 6px; }
+.items { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
 .item-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+.item-card.pick { border: 2px solid var(--accent); }
 .item-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: var(--bg-alt); display: block; }
-.item-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.item-name { font-size: 13px; line-height: 1.6; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.9em; }
-.item-price { font-family: 'Shippori Mincho', serif; font-size: 16px; color: var(--accent-deep); }
-.item-cta { margin-top: auto; display: inline-block; text-align: center; padding: 9px 0; border: 1px solid var(--accent); color: var(--accent-deep); text-decoration: none; font-size: 12.5px; border-radius: 999px; }
-.placeholder-card { border: 1px dashed var(--border); border-radius: 16px; padding: 24px; color: var(--text-mute); font-size: 13px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 160px; grid-column: 1 / -1; }
+.item-body { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.item-name { font-size: 12.5px; line-height: 1.6; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.7em; }
+.item-price { font-family: 'Shippori Mincho', serif; font-size: 15.5px; color: var(--accent-deep); }
+.item-cta { margin-top: auto; display: inline-block; text-align: center; padding: 9px 0; border: 1px solid var(--accent); color: var(--accent-deep); text-decoration: none; font-size: 12px; border-radius: 999px; }
+.placeholder-card { border: 1px dashed var(--border); border-radius: 16px; padding: 22px; color: var(--text-mute); font-size: 12.5px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 150px; grid-column: 1 / -1; }
+
+section.shokuba { background: var(--card); border-top: 1px solid var(--border-strong); }
+section.shokuba .wrap { padding: 60px 24px; }
+.shokuba-intro { max-width: 640px; margin: 0 auto 32px; text-align: center; }
+.shokuba-intro p { font-size: 14px; color: var(--text-soft); margin-bottom: 10px; }
 
 footer.site { background: var(--text); color: #EFE1D2; }
-footer.site .wrap { padding: 44px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
-footer.site .brand { font-family: 'Shippori Mincho', serif; font-size: 17px; margin-bottom: 4px; }
-footer.site .tagline { font-size: 12px; color: #C9B49C; }
-footer.site .credit { font-size: 11.5px; color: var(--text-mute); }
+footer.site .wrap { padding: 40px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+footer.site .brand { font-family: 'Shippori Mincho', serif; font-size: 16px; margin-bottom: 4px; }
+footer.site .tagline { font-size: 11.5px; color: #C9B49C; }
+footer.site .credit { font-size: 11px; color: var(--text-mute); }
 
 @media (max-width: 640px) {
   section.about .wrap { flex-direction: column; text-align: center; }
+  .avatar-wrap { position: static; margin: 0 auto; }
   .about-body p { margin-left: auto; margin-right: auto; }
-  .story-card { padding: 26px; }
+  .worry-list { margin-left: auto; margin-right: auto; text-align: left; }
+  .story-card { padding: 24px; }
 }
 </style>
 </head>
@@ -125,6 +130,7 @@ footer.site .credit { font-size: 11.5px; color: var(--text-mute); }
     <nav class="site-nav">
       <a href="#about">けいについて</a>
       <a href="#worries">お悩みから探す</a>
+      <a href="#shokuba">職場でバレたくない</a>
     </nav>
   </div>
 </header>
@@ -136,8 +142,39 @@ footer.site .credit { font-size: 11.5px; color: var(--text-mute); }
     </div>
     <div class="about-body">
       <p class="eyebrow">はじめまして、けいです</p>
-      <h1>幾つになっても楽しめるネイルと、<br>悩みに寄り添うケアを。</h1>
-      <p>ネイルサロンを続ける中で、爪の縦すじや乾燥、二枚爪といった"大人の指先悩み"と、私自身も日々向き合っています。「もう歳だから」で諦めたくなかった。同じように悩むあなたに、私が実際に試して良かったものだけをお届けします。</p>
+
+      <p class="lead">はじめまして。けいです。<br>ネイリストとして15年間、たくさんの女性の爪と手元に向き合ってきました💅</p>
+
+      <p>実は私自身、昔は深爪や噛み爪に悩み、人に手を見られることが嫌だった時期があります。</p>
+
+      <p>「きれいな手元になりたい」<br>そんな思いからネイルを学び、ネイルスクールに通い、ネイリストとして仕事を続けてきました。</p>
+
+      <p>そしてアラフィフになった今、更年期の影響もあってか、手のしびれなどを感じるようになり、長年続けてきたネイルサロンを閉店することにしました。</p>
+
+      <p>正直、少し寂しい気持ちもあります。<br>でも――</p>
+
+      <p>15年間、せっかく勉強してきたこと。たくさんのお客様の爪を見てきた経験。自分自身が爪に悩んできた経験。<br>これを「サロンを閉めたから終わり」にしたくない。</p>
+
+      <p>だからこれからは、</p>
+
+      <ul class="worry-list">
+        <li>🌿 縦すじ</li>
+        <li>🌿 二枚爪</li>
+        <li>🌿 乾燥</li>
+        <li>🌿 薄い爪</li>
+        <li>🌿 凸凹した爪</li>
+        <li>🌿 深爪・噛み爪</li>
+        <li>🌿 大人のネイル選び</li>
+      </ul>
+
+      <p>など、「爪をきれいにしたいけど、どうしたらいいの?」そんな大人女性のお悩みに寄り添いながら、私がこれまで学んできた知識や経験を少しずつ発信していきたいと思っています。</p>
+
+      <p>ネイルサロンという形ではなくても、今度は発信を通して、誰かの「きれいになりたい」をお手伝いできたら嬉しいです。</p>
+
+      <p>48歳。<br>まだまだ私も、これから✨</p>
+
+      <p>どうぞよろしくお願いします☺️</p>
+
       <a href="#worries" class="cta-btn">私の指先の悩みを見てみる</a>
     </div>
   </div>
@@ -151,13 +188,25 @@ footer.site .credit { font-size: 11.5px; color: var(--text-mute); }
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">お悩み</span>
-      <h2>あなたの指先、どのお悩みですか?</h2>
+      <h2>あなたの指先・足先、どのお悩みですか?</h2>
     </div>
     <div class="worry-grid" id="worryGrid"></div>
   </div>
 </section>
 
 <main id="worrySections"></main>
+
+<section class="shokuba" id="shokuba">
+  <div class="wrap">
+    <div class="shokuba-intro">
+      <p class="eyebrow" style="text-align:center;">職場でバレたくない</p>
+      <h2 style="margin-bottom:14px;">派手にならず、きちんとケアしている指先へ</h2>
+      <p>「規定で派手な色はNG」「でもケアはちゃんとしたい」というお悩みは意外とよく聞きます。色を楽しむというより、爪の表面を整えて清潔感を出す発想に切り替えるのがコツ。ツヤを抑えたマット仕上げや、クリア系のベースコートだけの仕上げなら、派手にならずきちんとケアしている印象を残せます。</p>
+      <p>万一バレてもぺろっと剥がせるジェルネイルならチャレンジしやすいです。ベースジェルを塗布後カラージェル・トップジェルを塗るだけでジェルネイルが完成、工程ごとにネイルライトで固めるので乾かす手間もありません。</p>
+    </div>
+    <div class="items" id="items-shokuba"></div>
+  </div>
+</section>
 
 <footer class="site">
   <div class="wrap">
