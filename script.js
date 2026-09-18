@@ -1,5 +1,7 @@
 const ICONS = {
-  sujime: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="8" width="16" height="28" rx="6"></rect><path d="M18 12 L18 32 M22 10 L22 34 M26 12 L26 32"></path></svg>`,
+  tatesuji: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="8" width="16" height="28" rx="6"></rect><path d="M18 12 L18 32 M22 10 L22 34 M26 12 L26 32"></path></svg>`,
+  yokosuji: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="8" width="16" height="28" rx="6"></rect><path d="M14 16 L30 16 M14 22 L30 22 M14 28 L30 28"></path></svg>`,
+  soriduma: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10 C13 18 13 30 15 36 C19 32 25 32 29 36 C31 30 31 18 29 10"></path></svg>`,
   nimaizume: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10 C13 18 13 28 16 36"></path><path d="M22 8 C20 18 20 30 24 38"></path><path d="M29 10 C31 18 31 28 28 36"></path></svg>`,
   sasakure: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8 v16"></path><path d="M22 24 c-4 2 -6 6 -4 10 c1.5 3 5 3 6 0 c1 3 4.5 3 6 0 c2 -4 0 -8 -4 -10"></path></svg>`,
   teshiwa: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8 C29 18 32 24 32 29 C32 35.5 27.5 39 22 39 C16.5 39 12 35.5 12 29 C12 24 15 18 22 8 Z"></path></svg>`,
@@ -7,8 +9,10 @@ const ICONS = {
   makizume: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8 v14"></path><path d="M14 22 a8 8 0 0 0 16 0"></path><path d="M14 22 c0 6 3 10 3 14"></path><path d="M30 22 c0 6 -3 10 -3 14"></path></svg>`,
 };
 
+const MAX_ITEMS_PER_CATEGORY = 4;
+
 const PICKS = {
-  sujime: [
+  tatesuji: [
     {
       name: 'ハンドクリーム ギフト 80g べたつかない 無香料 てんまん エイジングケア ハンドケア 老け手 ヒアルロン酸',
       price: 2500,
@@ -28,6 +32,8 @@ const PICKS = {
       url: 'https://hb.afl.rakuten.co.jp/ichiba/50b628f4.485d6265.50b628f5.e82957f4/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fopiofficialshop%2Fset_r_06%2F&link_type=picttext',
     },
   ],
+  yokosuji: [],
+  soriduma: [],
   nimaizume: [
     {
       name: '【レビュー4.5以上★高評価】ネイルオイル 高濃度 ヘマチン ヒト幹細胞配合 MYNAILPLEX マイネイルプレックス 二枚爪 割れ爪 育爪',
@@ -99,15 +105,36 @@ const SHOKUBA_ITEMS = [
 
 const CATEGORY_META = [
   {
-    id: 'sujime',
-    label: '縦すじ・凹凸',
-    storyLabel: 'お悩み:爪の縦すじ・凹凸',
+    id: 'tatesuji',
+    label: '縦すじ',
+    storyLabel: 'お悩み:爪の縦すじ',
     title: 'その爪の溝、実は私も同じでした。',
     body: [
       '爪をなぞるとザラつく、マニキュアを塗るとムラになる…その正体は「爪甲縦条(そうこうじゅうじょう)」と呼ばれる縦線で、40代を過ぎた頃からぐっと気になり始める、いわば"年齢爪"の代表選手です。乾燥や加齢が主な原因なので、慌てて削って平らにしようとすると爪が薄く柔らかくなってしまうのでNG。まずは保湿からはじめてみませんか?',
-      '横方向の凹凸や波打ちは、体調不良やストレス、栄養不足、甘皮への刺激が原因のことも。爪の主成分であるタンパク質(ケラチン)や、亜鉛・ビタミンB群を意識して摂るのもおすすめです。スプーン状にへこむ場合は鉄欠乏が関係していることもあるので、気になる方は皮膚科や内科に相談してみてくださいね。',
     ],
     tip: 'ネイルオイルは爪の根元(マトリックス)や甘皮までしっかり届くので、これから伸びてくる爪自体の質を底上げしてくれます。凹凸が気になるときは、削らずに埋めてくれるベースコートを重ねるのがおすすめです。',
+  },
+  {
+    id: 'yokosuji',
+    label: '横すじ・波打ち',
+    storyLabel: 'お悩み:横すじ・波打ち',
+    title: '横方向の段差、実は原因が違うんです。',
+    body: [
+      '爪に横方向の段差や波のような凹凸ができる症状は、縦すじとは少し性質が異なります。主な原因は体調不良やストレス、栄養不足、甘皮周りへのダメージ(甘皮の押しすぎや強い衝撃)。まずは甘皮を強く押し上げすぎたり、爪の根元を傷つけたりしないよう注意することが大切です。',
+      '合わせて、爪の主成分であるタンパク質(ケラチン)をはじめ、亜鉛やビタミンB群を意識して摂ることもおすすめします。',
+    ],
+    tip: '甘皮ケアで刺激を減らしつつ、ビオチンや亜鉛のサプリメントで内側から爪の材料を補うのが私のおすすめです。体調や生活リズムが原因のこともあるので、根気強く続けてみてくださいね。',
+  },
+  {
+    id: 'soriduma',
+    label: 'そり爪・へこみ',
+    storyLabel: 'お悩み:そり爪・点状のへこみ',
+    title: '爪の中央がへこむ、スプーンのようなあの形。',
+    body: [
+      '爪の中央が凹んでスプーンのようになったり、小さな穴のようなへこみが点々とできる症状です。主な原因として、鉄欠乏性貧血(スプーン爪)、皮膚疾患(乾癬やアトピーなど)、外部からの強い圧力が考えられます。',
+      '鉄分を摂取しても改善が見られない場合は、皮膚科や内科に相談してみるのもおすすめです。爪の形の変化は、体からのサインであることも少なくありません。',
+    ],
+    tip: '鉄分のサプリメントを試しつつ、爪の保護としてネイル美容液で表面をケアするのがおすすめです。変化が続く場合は、自己判断せず一度医療機関で相談してみてくださいね。',
   },
   {
     id: 'nimaizume',
@@ -228,9 +255,12 @@ function itemCardHtml(item, isPick) {
 }
 
 function renderItems(container, pickItems, apiItems) {
+  const remaining = Math.max(0, MAX_ITEMS_PER_CATEGORY - pickItems.length);
+  const limitedApi = apiItems.slice(0, remaining);
+
   const cards = [];
   pickItems.forEach((item) => cards.push(itemCardHtml(item, true)));
-  apiItems.forEach((item) => cards.push(itemCardHtml(item, false)));
+  limitedApi.forEach((item) => cards.push(itemCardHtml(item, false)));
   container.innerHTML = cards.join('');
 }
 
