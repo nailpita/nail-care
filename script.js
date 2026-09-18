@@ -7,7 +7,6 @@ const ICONS = {
   makizume: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8 v14"></path><path d="M14 22 a8 8 0 0 0 16 0"></path><path d="M14 22 c0 6 3 10 3 14"></path><path d="M30 22 c0 6 -3 10 -3 14"></path></svg>`,
 };
 
-// 各カテゴリの「けいイチオシ」商品(手動選定・楽天アフィリエイト)
 const PICKS = {
   sujime: [
     {
@@ -17,10 +16,10 @@ const PICKS = {
       url: 'https://hb.afl.rakuten.co.jp/ichiba/57a4a30f.8ecb2594.57a4a310.dfb2b8af/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftenman-kosho-yakubo%2Fbvhs02%2F&link_type=picttext',
     },
     {
-      name: 'ネイルオイル 爪 美容液 ケア 10ml ペンタイプ 補強 オーガニック キューティクルオイル 甘皮 NATURECOオーガニック ナチュレコ',
-      price: 1480,
-      imageUrl: 'https://hbb.afl.rakuten.co.jp/hgb/4c881b38.f58d47a4.4c881b39.ce0014a0/?me_id=1309777&item_id=10005750&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fvirginbeautyshop%2Fcabinet%2F04226192%2F10115789%2Fnr-og-004-no%2Fnr-og-no.jpg%3F_ex%3D400x400&s=400x400&t=picttext',
-      url: 'https://hb.afl.rakuten.co.jp/ichiba/4c881b38.f58d47a4.4c881b39.ce0014a0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fvirginbeautyshop%2Fnr-og-004-no%2F&link_type=picttext',
+      name: '【楽天スーパーセール】ネイルオイル【楽天1位9冠】キューティクルオイル 爪 美容液 植物性 自爪育成 縦線 二枚爪 ハイポニキウム 10ml 育爪 大人の爪オイル',
+      price: 3280,
+      imageUrl: 'https://hbb.afl.rakuten.co.jp/hgb/50d3253b.94448a85.50d3253c.6ab7dffb/?me_id=1426893&item_id=10000000&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fcarnival-mania%2Fcabinet%2Fotonanailoil%2Fimgrc0098820783.jpg%3F_ex%3D240x240&s=240x240&t=picttext',
+      url: 'https://hb.afl.rakuten.co.jp/ichiba/50d3253b.94448a85.50d3253c.6ab7dffb/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcarnival-mania%2Fotonaoil%2F&link_type=picttext',
     },
     {
       name: '【OPI公式】ネイルエンビー アセトンフリーリムーバー 2点セット 爪強化コート 補強 二枚爪 薄い爪 自爪ケア ベースコート',
@@ -77,7 +76,6 @@ const PICKS = {
   ],
 };
 
-// 「職場でバレたくない」は完全手動・API検索なしの独立枠
 const SHOKUBA_ITEMS = [
   {
     name: '【送料無料】SHINYGEL Mio ベーシックセット(ピールベース・ワイプレストップ・カラージェル1色) はがせるジェルネイル 日本製',
@@ -240,7 +238,6 @@ async function init() {
   buildWorryGrid();
   buildDetailSections();
 
-  // 「職場でバレたくない」枠(完全手動、API検索なし)
   renderItems(document.getElementById('items-shokuba'), SHOKUBA_ITEMS, []);
 
   try {
