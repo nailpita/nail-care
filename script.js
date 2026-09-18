@@ -9,7 +9,7 @@ const ICONS = {
   makizume: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8 v14"></path><path d="M14 22 a8 8 0 0 0 16 0"></path><path d="M14 22 c0 6 3 10 3 14"></path><path d="M30 22 c0 6 -3 10 -3 14"></path></svg>`,
 };
 
-const MAX_ITEMS_PER_CATEGORY = 4;
+const MAX_ITEMS_PER_CATEGORY = 3;
 
 const PICKS = {
   tatesuji: [
