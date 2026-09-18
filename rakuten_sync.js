@@ -21,14 +21,13 @@ if (!APP_ID || !ACCESS_KEY) {
   process.exit(1);
 }
 
-// カテゴリごとに複数キーワードで検索し、マージして上位を採用する
 const WORRY_CATEGORIES = [
-  { id: 'sujime', label: '縦すじ・凹凸', keywords: ['ネイル 補強コート', 'ネイルオイル'], hitsEach: 4 },
+  { id: 'sujime', label: '縦すじ・凹凸', keywords: ['爪 リッジフィラー', 'ネイルオイル 爪 補強'], hitsEach: 4 },
   { id: 'nimaizume', label: '二枚爪・薄い爪', keywords: ['二枚爪 補修', 'ネイルオイル 爪 補強'], hitsEach: 4 },
   { id: 'sasakure', label: 'ささくれ', keywords: ['ささくれ ケア', 'キューティクルオイル'], hitsEach: 4 },
   { id: 'teshiwa', label: '手のシワ・乾燥', keywords: ['ハンドクリーム 尿素', 'ハンドクリーム エイジングケア'], hitsEach: 4 },
-  { id: 'fukazume', label: '深爪・噛み癖', keywords: ['爪 ガラスファイル', 'ネイルオイル ペンタイプ', '育爪'], hitsEach: 4 },
-  { id: 'makizume', label: '巻き爪', keywords: ['巻き爪 ケア', '巻き爪 クリップ', '巻き爪'], hitsEach: 4 },
+  { id: 'fukazume', label: '深爪・噛み癖', keywords: ['育爪'], hitsEach: 6 },
+  { id: 'makizume', label: '巻き爪', keywords: ['巻き爪', '巻き爪改善'], hitsEach: 4 },
 ];
 
 function sleep(ms) {
