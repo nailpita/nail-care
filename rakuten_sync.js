@@ -123,7 +123,7 @@ async function runBatch() {
       await sleep(1000);
     }
 
-    categories[category.id] = merged.slice(0, 8);
+    categories[category.id] = merged.slice(0, 6);
     console.log(`  → 合計${categories[category.id].length}件`);
   }
 
