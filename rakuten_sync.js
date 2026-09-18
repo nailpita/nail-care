@@ -22,7 +22,9 @@ if (!APP_ID || !ACCESS_KEY) {
 }
 
 const WORRY_CATEGORIES = [
-  { id: 'sujime', label: '縦すじ・凹凸', keywords: ['爪 リッジフィラー', 'ネイルオイル 爪 補強'], hitsEach: 4 },
+  { id: 'tatesuji', label: '縦すじ', keywords: ['爪 リッジフィラー', 'ネイルオイル 爪 補強'], hitsEach: 4 },
+  { id: 'yokosuji', label: '横すじ・波打ち', keywords: ['ビオチン サプリ', '亜鉛 サプリ'], hitsEach: 4 },
+  { id: 'soriduma', label: 'そり爪・へこみ', keywords: ['鉄 サプリ', 'ネイル美容液'], hitsEach: 4 },
   { id: 'nimaizume', label: '二枚爪・薄い爪', keywords: ['二枚爪 補修', 'ネイルオイル 爪 補強'], hitsEach: 4 },
   { id: 'sasakure', label: 'ささくれ', keywords: ['ささくれ ケア', 'キューティクルオイル'], hitsEach: 4 },
   { id: 'teshiwa', label: '手のシワ・乾燥', keywords: ['ハンドクリーム 尿素', 'ハンドクリーム エイジングケア'], hitsEach: 4 },
