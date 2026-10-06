@@ -97,16 +97,26 @@ section.worry-detail:nth-of-type(even) .tip-box { background: var(--bg-alt); }
 .tip-box p.tip-label { font-size: 12.5px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
 .tip-box p.tip-body { font-size: 13px; color: var(--text-soft); }
 
+/* ===== 商品カード ===== */
 .pick-label, .items-label { font-size: 13.5px; font-weight: 700; color: var(--text); margin: 24px 0 12px; text-align: center; }
-.pick-badge { display: inline-block; background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; margin-bottom: 6px; }
 .items { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
-.item-card { flex: 1 1 220px; max-width: 260px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+.item-card { flex: 1 1 220px; max-width: 260px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; color: var(--text); }
 .item-card.pick { border: 2px solid var(--accent); }
-.item-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: var(--bg-alt); display: block; }
-.item-body { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.item-name { font-size: 12.5px; line-height: 1.6; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.7em; }
+
+/* 画像の枠:画像が出ないときも、枠・文字・ボタンは必ず表示される */
+.item-thumb { position: relative; width: 100%; aspect-ratio: 1 / 1; background: #fff; border-bottom: 1px solid var(--border); flex: 0 0 auto; }
+.item-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+.item-thumb.no-img { background: var(--bg-alt); display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; font-size: 11px; line-height: 1.6; color: var(--text-mute); }
+.item-thumb.no-img::before { content: "画像は楽天の\Aページでご確認ください"; white-space: pre-line; }
+.item-thumb.no-img img { display: none; }
+.pick-badge { position: absolute; top: 8px; left: 8px; z-index: 1; background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; line-height: 1.6; }
+
+.item-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.item-tag { font-size: 11px; font-weight: 700; color: var(--accent-deep); line-height: 1.5; }
+.item-name { font-size: 12.5px; line-height: 1.6; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; min-height: 3.7em; }
 .item-price { font-family: 'Shippori Mincho', serif; font-size: 15.5px; color: var(--accent-deep); }
 .item-cta { margin-top: auto; display: inline-block; text-align: center; padding: 9px 0; border: 1px solid var(--accent); color: var(--accent-deep); text-decoration: none; font-size: 12px; border-radius: 999px; }
+.price-note { font-size: 11px; line-height: 1.7; color: var(--text-mute); text-align: center; margin-top: 16px; }
 .placeholder-card { border: 1px dashed var(--border); border-radius: 16px; padding: 22px; color: var(--text-mute); font-size: 12.5px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 150px; width: 100%; }
 
 section.shokuba { background: var(--card); border-top: 1px solid var(--border-strong); }
@@ -140,7 +150,15 @@ footer.site .credit { font-size: 11px; color: var(--text-mute); }
   .about-body p { margin-left: auto; margin-right: auto; }
   .worry-list { margin-left: auto; margin-right: auto; text-align: left; }
   .story-card { padding: 24px; }
-  .item-card { max-width: 100%; }
+
+  /* スマホでは商品カードを「左に画像・右に文字」の横並びにして、縦に長くなりすぎないようにする */
+  .items { flex-direction: column; flex-wrap: nowrap; gap: 12px; }
+  .item-card { flex: 0 0 auto; width: 100%; max-width: 100%; flex-direction: row; }
+  .item-thumb { width: 112px; flex: 0 0 112px; align-self: flex-start; border-bottom: none; border-right: 1px solid var(--border); }
+  .item-thumb.no-img { padding: 6px; font-size: 10px; }
+  .item-body { padding: 10px 12px; gap: 4px; }
+  .item-name { min-height: 0; }
+  .item-cta { align-self: flex-start; padding: 7px 18px; margin-top: 4px; }
 }
 </style>
 </head>
@@ -230,6 +248,7 @@ footer.site .credit { font-size: 11px; color: var(--text-mute); }
       <p>万一バレてもぺろっと剥がせるジェルネイルならチャレンジしやすいです。ベースジェルを塗布後カラージェル・トップジェルを塗るだけでジェルネイルが完成、工程ごとにネイルライトで固めるので乾かす手間もありません。</p>
     </div>
     <div class="items" id="items-shokuba"></div>
+    <p class="price-note">※価格・送料は掲載時点(2026年9〜10月)のものです。最新の情報は楽天のページでご確認ください。</p>
   </div>
 </section>
 
