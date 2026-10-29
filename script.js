@@ -1,14 +1,3 @@
-const ICONS = {
-  tatesuji: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34 C13 22 15 10 22 6 C29 10 31 22 30 34"></path><path d="M14 32 Q22 37 30 32"></path><path d="M18 14 L17 29 M22 10 L22 31 M26 14 L27 29"></path></svg>`,
-  yokosuji: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34 C13 22 15 10 22 6 C29 10 31 22 30 34"></path><path d="M14 32 Q22 37 30 32"></path><path d="M16 15 Q22 12 28 15 M15 21 Q22 18 29 21 M15 27 Q22 24 29 27"></path></svg>`,
-  soriduma: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34 C13 22 15 10 22 6 C29 10 31 22 30 34"></path><path d="M14 32 Q22 37 30 32"></path><path d="M16 13 Q22 22 28 13"></path></svg>`,
-  nimaizume: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34 C13 22 15 10 22 6 C29 10 31 22 30 34"></path><path d="M14 32 Q22 37 30 32"></path><path d="M16 16 Q22 12 28 16"></path><path d="M15 19 Q22 15.5 29 19"></path></svg>`,
-  sasakure: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34 C13 22 15 10 22 6 C29 10 31 22 30 34"></path><path d="M14 32 Q22 37 30 32"></path><path d="M14 26 L11 29 L14.5 30.5"></path></svg>`,
-  teshiwa: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 30 C13 19 15 8 22 4 C29 8 31 19 30 30"></path><path d="M14 28 Q22 33 30 28"></path><path d="M16 35 Q22 38 28 35 M17 39 Q22 41.5 27 39"></path></svg>`,
-  fukazume: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 34 C14 24 16 16 22 13 C28 16 30 24 29 34"></path><path d="M16 21 Q19 24 22 20 Q25 24 28 21"></path></svg>`,
-  makizume: `<svg width="40" height="40" viewBox="0 0 44 44" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 33 C13 22 15 10 22 6 C29 10 31 22 30 33"></path><path d="M16 30 Q13 33 16 35"></path><path d="M28 30 Q31 33 28 35"></path></svg>`,
-};
-
 // ▼1つのお悩みに表示する商品の最大数
 const MAX_ITEMS_PER_CATEGORY = 3;
 
@@ -156,95 +145,6 @@ const SHOKUBA_ITEMS = [
        name: 'LED&UV ジェルネイルライト 48W 低ヒート機能 1年保証', label: 'ネイルライト', price: 2999 }),
 ];
 
-const CATEGORY_META = [
-  {
-    id: 'tatesuji',
-    label: '縦すじ',
-    storyLabel: 'お悩み:爪の縦すじ',
-    title: 'その爪の溝、実は私も同じでした。',
-    body: [
-      '爪をなぞるとザラつく、マニキュアを塗るとムラになる…その正体は「爪甲縦条(そうこうじゅうじょう)」と呼ばれる縦線で、40代を過ぎた頃からぐっと気になり始める、いわば"年齢爪"の代表選手です。乾燥や加齢が主な原因なので、慌てて削って平らにしようとすると爪が薄く柔らかくなってしまうのでNG。まずは保湿からはじめてみませんか?',
-    ],
-    tip: 'ネイルオイルは、ハンドクリームだけでは届きにくい爪の根元(マトリックス)や甘皮までしっかり届くので、これから伸びてくる爪自体の質を底上げしてくれます。凹凸が気になるときは、削らずに埋めてくれるベースコートを重ねるのがおすすめです。',
-  },
-  {
-    id: 'yokosuji',
-    label: '横すじ・波打ち',
-    storyLabel: 'お悩み:横すじ・波打ち',
-    title: 'その横みぞ、実は原因が違うんです。',
-    body: [
-      '爪に横向きの溝(みぞ)や波打ちができる症状は、縦すじとは少し性質が異なります。主な原因は体調不良やストレス、栄養不足、甘皮周りへのダメージ(甘皮の押しすぎや強い衝撃)。まずは甘皮を強く押し上げすぎたり、爪の根元を傷つけたりしないよう注意することが大切です。',
-      '合わせて、爪の主成分であるタンパク質(ケラチン)をはじめ、亜鉛やビタミンB群を意識して摂ることもおすすめします。',
-    ],
-    tip: '甘皮ケアで刺激を減らしつつ、ビオチンや亜鉛のサプリメントで内側から爪の材料を補うのが私のおすすめです。体調や生活リズムが原因のこともあるので、根気強く続けてみてくださいね。',
-  },
-  {
-    id: 'soriduma',
-    label: 'そり爪・へこみ',
-    storyLabel: 'お悩み:そり爪・点状のへこみ',
-    title: '爪の中央がへこむ、スプーンのようなあの形。',
-    body: [
-      '爪の中央が凹んでスプーンのようになったり、小さな穴のようなへこみが点々とできる症状です。主な原因として、鉄欠乏性貧血(スプーン爪)、皮膚疾患(乾癬やアトピーなど)、外部からの強い圧力が考えられます。',
-      '爪の形の変化は、体からのサインであることも少なくありません。気になるときは、まず内科や皮膚科で相談してみてください。鉄分を摂取しても改善が見られない場合も、医療機関への相談がおすすめです。',
-    ],
-    tip: '受診して問題がなければ、鉄分のサプリメントと、爪の表面を整えるネイル美容液でケアしていくのがおすすめです。サプリメントは、医師の指示や商品の表示にしたがって、無理のない量でお使いください。',
-  },
-  {
-    id: 'nimaizume',
-    label: '二枚爪・薄い爪',
-    storyLabel: 'お悩み:二枚爪・薄い爪',
-    title: '爪の先がペロッとめくれる、あのお悩み。',
-    body: [
-      '爪の先が層になってペロッとめくれてしまう二枚爪。正式には「爪甲層状分裂症」といって、水仕事や消毒、除光液の使いすぎによる乾燥が主な原因です。めくれた部分は無理に剥がさず、爪切りよりも爪用やすりでそっと整えてあげるのがポイントです。',
-    ],
-    tip: 'ネイルオイルは爪の内部にうるおいを与えて、層がバラバラになるのを防いでくれます。伸びてくる途中の爪が薄くて心配なときは、補強コートで外側から守ってあげると割れやすさがぐっと減りますよ。',
-  },
-  {
-    id: 'sasakure',
-    label: 'ささくれ',
-    storyLabel: 'お悩み:ささくれ',
-    title: 'ピリッと痛む、あのささくれ。',
-    body: [
-      '爪の脇の皮膚がめくれてピリッと痛む、ささくれ。乾燥や水仕事、甘皮ケア不足が原因で、季節の変わり目に増えやすいお悩みです。気になってもつい引っ張りたくなりますが、清潔なはさみで切ってから保湿するのが正解です。',
-    ],
-    tip: 'ネイルオイルは甘皮の際まですっと浸透するテクスチャーなので、ささくれの根本原因である乾燥そのものにアプローチできます。朝・昼・寝る前の1日3回を習慣にできると、見違えるような変化を実感できると思います。',
-  },
-  {
-    id: 'teshiwa',
-    label: '手のシワ・乾燥',
-    storyLabel: 'お悩み:手のシワ・乾燥(老け手)',
-    title: '顔より先に、手で歳を感じることがあります。',
-    body: [
-      '「顔より先に手で歳を感じる」とよく言われる"老け手"。手の甲のシワや乾燥は、水分・油分の減少や紫外線の積み重ねが主な原因です。特別なことより、洗うたびに保湿する、というシンプルな習慣がいちばん効きます。',
-    ],
-    tip: '尿素配合のハンドクリームは、硬くなりがちな指先の角質までやわらげてくれるので、乾燥小ジワが気になる手肌にしっかりアプローチしてくれます。入浴後・手洗い後・寝る前のタイミングで塗るのが習慣化のコツです。手のゴワツキが気になるときは、ハンドスクラブから始めてみてください。',
-  },
-  {
-    id: 'fukazume',
-    label: '深爪・噛み癖',
-    storyLabel: 'お悩み:深爪・噛み癖',
-    title: '気づくと爪を噛んでしまう、そんな癖。',
-    body: [
-      '気づくと爪を噛んでしまう…この癖は医学的には「咬爪症(こうそうしょう)」と呼ばれ、無意識のうちに触ってしまうことが多いのが特徴です。大事なのは「我慢」より「触りたくならない状態」を作ること。私の場合は爪をヤスリで削ったり、甘皮ケアしたり、ジェルネイルをしたことで「噛みたい!」という気持ちが抑えられました。',
-    ],
-    tip: 'ネイルオイルは、その名の通り爪を健やかに伸ばしてくれるアイテム。点眼式の容器で持ち運びしやすく、触りたくなった瞬間の"代わりの行動"として塗る習慣にしやすいのが魅力です。',
-  },
-  {
-    id: 'makizume',
-    label: '巻き爪',
-    storyLabel: 'お悩み:巻き爪',
-    title: '足の爪の端が食い込む、あの痛み。',
-    body: [
-      '足の爪の端が内側に巻き込んでしまう巻き爪。深爪や合わない靴、歩き方のクセが主な原因で、悪化すると「陥入爪(かんにゅうそう)」として痛みを伴うこともあります。爪の角を丸く削りすぎず、まっすぐ長めに切るのが基本のケアです。',
-      '痛みや赤み、膿が出ているときは、自己判断で続けず、皮膚科や形成外科に相談してください。',
-    ],
-    tip: '巻き爪専用の保護アイテムは、痛みをやわらげながら正しい形へ少しずつ導いてくれるので、自己流のケアで悪化させてしまうリスクを減らせます。',
-  },
-];
-
-const worryGridEl = document.getElementById('worryGrid');
-const worrySectionsEl = document.getElementById('worrySections');
-
 // ▼表示の確認用:ページのURLの最後に ?debug=1 を付けると、画像の表示結果が画面の下に出ます
 const DEBUG = new URLSearchParams(location.search).get('debug') === '1';
 const imgLog = {};
@@ -297,48 +197,6 @@ function onItemImgLoad(img) {
 window.onItemImgError = onItemImgError;
 window.onItemImgLoad = onItemImgLoad;
 
-function buildWorryGrid() {
-  CATEGORY_META.forEach((cat) => {
-    const card = document.createElement('a');
-    card.className = 'worry-card';
-    card.href = `#${cat.id}`;
-    card.innerHTML = `${ICONS[cat.id] || ''}<span>${cat.label}</span>`;
-    worryGridEl.appendChild(card);
-  });
-}
-
-function buildDetailSections() {
-  CATEGORY_META.forEach((cat) => {
-    const section = document.createElement('section');
-    section.className = 'worry-detail';
-    section.id = cat.id;
-    const bodyHtml = cat.body.map((p) => `<p class="body-text">${p}</p>`).join('');
-    section.innerHTML = `
-      <div class="wrap">
-        <div class="story-card">
-          <div class="story-head">
-            <img src="assets/founder.jpg" alt="けい">
-            <div>
-              <p class="who">けい</p>
-              <p class="role">ネイリスト</p>
-            </div>
-          </div>
-          <p class="story-label">${cat.storyLabel}</p>
-          <h3>${cat.title}</h3>
-          ${bodyHtml}
-          <div class="tip-box">
-            <p class="tip-label">私だったら、これをおすすめします。</p>
-            <p class="tip-body">${cat.tip}</p>
-          </div>
-        </div>
-        <div class="items" id="items-${cat.id}"></div>
-        <p class="price-note">※価格・送料は掲載時点(2026年9〜10月)のものです。最新の情報は楽天のページでご確認ください。</p>
-      </div>
-    `;
-    worrySectionsEl.appendChild(section);
-  });
-}
-
 function renderPlaceholder(container, message) {
   container.innerHTML = `<div class="placeholder-card">${message}</div>`;
 }
@@ -373,37 +231,56 @@ function renderItems(container, pickItems, apiItems) {
   container.innerHTML = cards.join('');
 }
 
+// ▼ページごとに表示する商品の組み合わせ
+//   picks : [PICKSのカテゴリ名, その中の何番目か(0から数える)] の並び。上から順に表示されます
+//   api   : 商品が3つに満たないとき、products.json のどのカテゴリから足すか(なければ省略)
+const PAGE_ITEMS = {
+  tatesuji:  { picks: [['tatesuji', 0], ['tatesuji', 1], ['tatesuji', 2]], api: 'tatesuji' },
+  yokosuji:  { picks: [['nimaizume', 1], ['nimaizume', 0]] },
+  namiuchi:  { picks: [['sasakure', 1], ['tatesuji', 0]], api: 'tatesuji' },
+  soriduma:  { picks: [['nimaizume', 0], ['nimaizume', 1], ['nimaizume', 2]] },
+  nimaizume: { picks: [['nimaizume', 0], ['nimaizume', 1], ['nimaizume', 2]] },
+  usui:      { picks: [['tatesuji', 2], ['nimaizume', 2], ['nimaizume', 1]] },
+  sasakure:  { picks: [['sasakure', 0], ['sasakure', 1], ['sasakure', 2]] },
+  teshiwa:   { picks: [['teshiwa', 2], ['teshiwa', 0]] },
+  kansou:    { picks: [['teshiwa', 0], ['teshiwa', 2]] },
+  teare:     { picks: [['teshiwa', 0], ['teshiwa', 2]] },
+  fukazume:  { picks: [['fukazume', 0], ['fukazume', 2], ['nimaizume', 0]] },
+  kamizume:  { picks: [['fukazume', 1], ['nimaizume', 0], ['fukazume', 2]] },
+  makizume:  { picks: [['makizume', 0], ['makizume', 1], ['makizume', 2]] },
+};
+
 async function init() {
-  buildWorryGrid();
-  buildDetailSections();
+  const root = document.body.dataset.root || '';
 
-  renderItems(document.getElementById('items-shokuba'), SHOKUBA_ITEMS, []);
+  // トップページ:「職場でバレたくない」の商品
+  const shokubaEl = document.getElementById('items-shokuba');
+  if (shokubaEl) renderItems(shokubaEl, SHOKUBA_ITEMS, []);
 
-  try {
-    const res = await fetch('products.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error('products.json の読み込みに失敗しました');
-    const data = await res.json();
+  // お悩みページ:そのページ用の商品
+  const box = document.getElementById('items');
+  if (!box) return;
+  const conf = PAGE_ITEMS[box.dataset.page];
+  if (!conf) return;
 
-    CATEGORY_META.forEach((cat) => {
-      const container = document.getElementById(`items-${cat.id}`);
-      const picks = PICKS[cat.id] || [];
-      const apiItems = (data.categories && data.categories[cat.id]) || [];
-      if (picks.length === 0 && apiItems.length === 0) {
-        renderPlaceholder(container, '現在準備中です。しばらくお待ちください。');
-      } else {
-        renderItems(container, picks, apiItems);
+  const picks = conf.picks.map(([cat, i]) => (PICKS[cat] || [])[i]).filter(Boolean);
+  let apiItems = [];
+  if (conf.api && picks.length < MAX_ITEMS_PER_CATEGORY) {
+    try {
+      const res = await fetch(root + 'products.json', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        apiItems = (data.categories && data.categories[conf.api]) || [];
       }
-    });
-  } catch (err) {
-    CATEGORY_META.forEach((cat) => {
-      const container = document.getElementById(`items-${cat.id}`);
-      const picks = PICKS[cat.id] || [];
-      if (picks.length > 0) {
-        renderItems(container, picks, []);
-      } else {
-        renderPlaceholder(container, '読み込みエラーが発生しました。時間をおいて再度お試しください。');
-      }
-    });
+    } catch (err) {
+      // 読み込めなくても、手動で選んだ商品だけで表示します
+    }
+  }
+
+  if (picks.length + apiItems.length === 0) {
+    renderPlaceholder(box, '現在準備中です。しばらくお待ちください。');
+  } else {
+    renderItems(box, picks, apiItems);
   }
 }
 
