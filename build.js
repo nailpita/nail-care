@@ -318,7 +318,9 @@ const toSub = (html, root) => (root ? html.replace(/href="\.\/(#?)/g, `href="${r
 const headerHtml = (root) => toSub(PART_HEADER, root);
 const footerHtml = () => PART_FOOTER;
 const roomCtaHtml = () => PART_ROOM;
-const lineCtaHtml = () => PART_LINE;
+// お悩みページのLINE案内には、医療機関への案内を付け足します
+const MEDICAL_NOTE = '<p class="line-note">※痛み・腫れ・出血などがあるときは、医療機関へご相談ください。</p>';
+const lineCtaHtml = () => PART_LINE.replace(/(<a [^>]*class="line-btn"[^>]*>[\s\S]*?<\/a>)/, `$1\n      ${MEDICAL_NOTE}`);
 
 function worryCard(w, root) {
   return `<a class="worry-card" href="${root}${w.slug}/">${ICONS[w.slug]}<span>${esc(w.label)}</span></a>`;
