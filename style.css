@@ -88,6 +88,8 @@ section.worry-detail:nth-of-type(even) .tip-box { background: var(--bg-alt); }
 .item-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
 .item-tag { font-size: 11px; font-weight: 700; color: var(--accent-deep); line-height: 1.5; }
 .item-name { font-size: 12.5px; line-height: 1.6; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; min-height: 3.7em; }
+.item-rating { font-size: 12px; color: var(--accent-deep); margin-top: 4px; }
+.item-voice { font-size: 11.5px; line-height: 1.7; color: var(--text-mute); margin: 6px 0 4px; }
 .item-price { font-family: 'Shippori Mincho', serif; font-size: 15.5px; color: var(--accent-deep); }
 .item-cta { margin-top: auto; display: inline-block; text-align: center; padding: 9px 0; border: 1px solid var(--accent); color: var(--accent-deep); text-decoration: none; font-size: 12px; border-radius: 999px; }
 .price-note { font-size: 11px; line-height: 1.7; color: var(--text-mute); text-align: center; margin-top: 16px; }

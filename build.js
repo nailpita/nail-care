@@ -2,7 +2,12 @@
  * ネイルピタ ページ作成スクリプト
  *
  * 使い方:  node build.js
- *   → index.html(トップ) / お悩みごとのページ(○○/index.html) / sitemap.xml を作り直します。
+ *   → お悩みごとのページ(○○/index.html) / sitemap.xml を作り直し、
+ *     index.html(トップ)は「お悩み一覧」の部分だけを最新にします。
+ *
+ * ★トップページ(index.html)が見本です。
+ *   ヘッダー・公式LINEの案内・楽天ROOMの案内・フッターは、index.html から自動でコピーされます。
+ *   index.html を直したら、node build.js を実行すると、ほかのページにも同じ内容が反映されます。
  *
  * 文面を直したいときは、下の WORRIES の中の文章を直して、もう一度 node build.js を実行してください。
  * (お悩みごとの文面は、Notion「爪と手のお悩み13種｜無料説明文（SEO・アフィリエイト用）」から転記したものです)
@@ -12,8 +17,8 @@ const fs = require('fs');
 const path = require('path');
 
 const SITE = 'https://nailpita.github.io/nail-care';
-const UPDATED = '2026-10-30';
-const UPDATED_JP = '2026年10月30日';
+const UPDATED = '2026-10-31';
+const UPDATED_JP = '2026年10月31日';
 const OG_IMAGE = `${SITE}/assets/hand-care.jpg`;
 const ROOM_URL = 'https://room.rakuten.co.jp/room_ed10370aee/items';
 const LINE_URL = 'https://lin.ee/P9Dp4kV';
@@ -38,21 +43,22 @@ const ICONS = {
   teare: svg(`<path d="${NAIL}"></path><path d="${NAIL_BOTTOM}"></path><path d="M18 14 L22 19 L18 24 L23 30"></path>`),
   fukazume: svg(`<path d="M15 34 C14 24 16 16 22 13 C28 16 30 24 29 34"></path><path d="M16 21 Q19 24 22 20 Q25 24 28 21"></path>`),
   kamizume: svg(`<path d="M14 34 C13 24 14 17 16 14 L19 17 L22 12 L25 17 L28 14 C30 17 31 24 30 34"></path><path d="${NAIL_BOTTOM}"></path>`),
+  kakato: svg(`<path d="M12 6 C11 16 11 24 13 30 C15 36 20 39 26 38 C31 37 33 33 32 29 C31 25 27 24 26 20 C25 14 26 9 26 6"></path><path d="M17 31 L20 28 M21 35 L23 31 M26 34 L27 31"></path>`),
   makizume: svg(`<path d="M14 33 C13 22 15 10 22 6 C29 10 31 22 30 33"></path><path d="M16 30 Q13 33 16 35"></path><path d="M28 30 Q31 33 28 35"></path>`),
 };
 
 // ===== お悩みごとの文面(Notionから転記) =====
 const WORRIES = [
   {
-    slug: 'tatesuji', label: '縦筋',
-    seo: '爪の縦筋（縦線）の原因は？目立たなくする毎日のケア',
+    slug: 'tatesuji', label: '爪の縦線',
+    seo: '爪の縦線の原因は？目立たなくする毎日のケア',
     paras: [
-      '爪に入る縦の筋は、年齢を重ねるとだれにでも出てくるものです。肌にしわができるのと同じで、爪も乾燥すると筋が目立ちやすくなります。',
-      '特に、手洗いや水仕事が多い人、除光液をよく使う人は、爪の水分と油分が足りなくなりがち。縦筋そのものより「乾燥して見える」ことが、手元を老けて見せる原因です。',
+      '爪に入る縦の線は、年齢を重ねるとだれにでも出てくるものです。肌にしわができるのと同じで、爪も乾燥すると線が目立ちやすくなります。',
+      '特に、手洗いや水仕事が多い人、除光液をよく使う人は、爪の水分と油分が足りなくなりがち。縦線そのものより「乾燥して見える」ことが、手元を老けて見せる原因です。',
     ],
     today: [
       '手を洗ったあと、爪の根元にネイルオイルを1滴',
-      '筋が気になるときは、目の細かいバッファーで表面を軽くなでる程度に（削りすぎると爪が薄くなるので、月1回まで）',
+      '線が気になるときは、目の細かいバッファーで表面を軽くなでる程度に（削りすぎると爪が薄くなるので、月1回まで）',
     ],
     guide: 'ネイルオイル／爪みがき用バッファー（目の細かいもの）／ネイル用美容液',
   },
@@ -216,13 +222,29 @@ const WORRIES = [
     ],
     guide: '足の爪用ニッパー（爪切り）／巻き爪用のケアグッズ／指先がゆったりした靴下・インソール',
   },
+  {
+    slug: 'kakato', label: 'かかとのガサガサ',
+    seo: 'かかとのガサガサの原因は？ストッキングが引っかかる前にできるケア',
+    paras: [
+      'かかとがガサガサして、ストッキングが引っかかる。\nサンダルの季節じゃなくても、ふと見て「えっ」となること、ありませんか？',
+      '足の裏には、肌をうるおす油分（皮脂）を出すところがありません。\nそのうえ、かかとは毎日体重がかかる場所。\n肌が自分を守ろうとして、角質がどんどん厚く、かたくなっていきます。',
+      'そこに乾燥が重なると、\nかたくなった角質が白っぽくなって、ひび割れしやすくなるんです。\n特に秋から冬は、ガサガサが一気に目立ってきます。',
+      'もうひとつ多いのが、「削りすぎ」。\nガサガサが気になって、ゴシゴシ削っていませんか？\n削りすぎると、肌がまた守ろうとして、かえって厚くなると言われています。',
+    ],
+    todayTitle: 'ケアのワンポイント',
+    today: [
+      'お風呂上がりの5分以内に、かかとにクリームを塗って靴下をはく。肌がやわらかいうちに塗って、靴下でフタをするイメージです。',
+      'やすりは週1回まで。白い粉が少し出たらストップ。使うタイミングは、やすりの説明に合わせてね。',
+    ],
+    guide: 'かかと用やすり（使うのは週1回まで）／履くだけのフットピーリング／保湿用のかかとケア靴下',
+  },
 ];
 
 // トップページの「お悩みから探す」のグループ分け
 const GROUPS = [
   ['爪のお悩み', ['tatesuji', 'yokosuji', 'namiuchi', 'soriduma', 'nimaizume', 'usui', 'sasakure', 'fukazume', 'kamizume']],
-  ['手のお悩み', ['teshiwa', 'kansou', 'teare']],
-  ['足の爪のお悩み', ['makizume']],
+  ['手の爪のお悩み', ['teshiwa', 'kansou', 'teare']],
+  ['足のお悩み', ['makizume', 'kakato']],
 ];
 
 // ===== 共通パーツ =====
@@ -232,7 +254,7 @@ const esc = (s) =>
 const bySlug = Object.fromEntries(WORRIES.map((w) => [w.slug, w]));
 
 function metaDesc(w) {
-  const sentences = w.paras.join('').split('。').filter(Boolean).map((s) => s + '。');
+  const sentences = w.paras.join('').replace(/\n/g, '').split('。').filter(Boolean).map((s) => s + '。');
   let out = '';
   for (const s of sentences) {
     if (out && (out + s).length > 118) break;
@@ -276,60 +298,27 @@ ${ld.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script
 </head>`;
 }
 
-function headerHtml(root) {
-  const top = root || './';
-  return `<header class="site">
-  <div class="wrap">
-    <a class="logo" href="${top}">
-      <span class="logo-main">ネイルピタ</span>
-      <span class="logo-sub">40代50代の手元ケア習慣</span>
-    </a>
-    <nav class="site-nav" aria-label="メニュー">
-      <a href="${top}#about">けいについて</a>
-      <a href="${top}#worries">お悩みから探す</a>
-      <a href="${top}#shokuba">職場でバレたくない</a>
-    </nav>
-  </div>
-</header>`;
+// ヘッダー・公式LINE・楽天ROOM・フッターは、見本の index.html からそのままコピーします
+const INDEX_FILE = path.join(__dirname, 'index.html');
+const INDEX_HTML = fs.readFileSync(INDEX_FILE, 'utf8');
+function pickFromIndex(re, name) {
+  const m = INDEX_HTML.match(re);
+  if (!m) throw new Error(`index.html の中に「${name}」が見つかりません`);
+  return m[0];
 }
+const PART_HEADER = pickFromIndex(/<header class="site">[\s\S]*?<\/header>/, 'ヘッダー');
+const PART_LINE = pickFromIndex(/<section class="line-cta">[\s\S]*?<\/section>/, '公式LINEの案内');
+const PART_ROOM = pickFromIndex(/<section class="room-cta">[\s\S]*?<\/section>/, '楽天ROOMの案内');
+const PART_FOOTER = pickFromIndex(/<footer class="site">[\s\S]*?<\/footer>/, 'フッター');
+// トップのナビ「爪のお悩みから探す」の文字(パンくずにも使います)
+const WORRIES_NAV_LABEL = (PART_HEADER.match(/href="\.\/#worries">([^<]*)</) || [])[1] || 'お悩みから探す';
 
-function footerHtml() {
-  return `<footer class="site">
-  <div class="wrap">
-    <div>
-      <p class="brand">ネイルピタ</p>
-      <p class="tagline">何歳になっても、指先をあきらめない。</p>
-    </div>
-    <p class="credit">本ページで紹介する商品はアフィリエイトプログラムを利用して紹介しています。<br>掲載内容は一般的な情報で、診断や治療を目的としたものではありません。<br>&copy; ネイルピタ / けい</p>
-  </div>
-</footer>`;
-}
-
-function roomCtaHtml() {
-  return `<section class="room-cta">
-  <div class="wrap">
-    <div class="room-card">
-      <p class="eyebrow">もっとアイテムを見たい方へ</p>
-      <p class="desc">大人の爪悩みに寄り添ったアイテムだけを厳選してご紹介している、楽天ROOM「ネイリストのプチプラ手元足元ケア」もやっています。悩み別のコレクションに分けているので、ここで紹介しきれなかったアイテムも、気になるところからのぞいてみてください。</p>
-      <a href="${ROOM_URL}" class="room-btn" target="_blank" rel="nofollow sponsored noopener">楽天ROOMを見てみる →</a>
-    </div>
-  </div>
-</section>`;
-}
-
-function lineCtaHtml() {
-  return `<section class="line-cta">
-  <div class="wrap">
-    <div class="line-card">
-      <p class="eyebrow">爪のお悩み、ひとりで抱えていませんか？</p>
-      <h2>初回だけ無料で、公式LINEから相談できます</h2>
-      <p>「どれを選べばいい？」「このケアで合っている？」と迷ったときは、公式LINEで気軽にご相談ください。</p>
-      <a href="${LINE_URL}" class="line-btn" target="_blank" rel="noopener">公式LINEで相談する（初回無料）</a>
-      <p class="line-note">※痛み・腫れ・出血などがあるときは、医療機関へご相談ください。</p>
-    </div>
-  </div>
-</section>`;
-}
+// お悩みページ用に、トップへのリンク(./)を ../ に直します
+const toSub = (html, root) => (root ? html.replace(/href="\.\/(#?)/g, `href="${root}$1`) : html);
+const headerHtml = (root) => toSub(PART_HEADER, root);
+const footerHtml = () => PART_FOOTER;
+const roomCtaHtml = () => PART_ROOM;
+const lineCtaHtml = () => PART_LINE;
 
 function worryCard(w, root) {
   return `<a class="worry-card" href="${root}${w.slug}/">${ICONS[w.slug]}<span>${esc(w.label)}</span></a>`;
@@ -375,7 +364,7 @@ ${headerHtml(root)}
 <article class="worry-page">
   <div class="wrap">
     <nav class="crumbs" aria-label="パンくずリスト">
-      <a href="${root}">ネイルピタ</a> › <a href="${root}#worries">お悩みから探す</a> › <span>${esc(w.label)}</span>
+      <a href="${root}">ネイルピタ</a> › <a href="${root}#worries">${esc(WORRIES_NAV_LABEL)}</a> › <span>${esc(w.label)}</span>
     </nav>
 
     <p class="eyebrow">お悩み：${esc(w.label)}</p>
@@ -383,9 +372,9 @@ ${headerHtml(root)}
     <p class="byline"><img src="${root}assets/founder.jpg" alt="けい" width="32" height="32"><span>書いた人：けい（ネイリスト）｜${UPDATED_JP}更新</span></p>
 
     <h2>${esc(w.label)}の原因と考え方</h2>
-    ${w.paras.map((p) => `<p>${esc(p)}</p>`).join('\n    ')}
+    ${w.paras.map((p) => `<p>${esc(p).replace(/\n/g, '<br>')}</p>`).join('\n    ')}
 
-    <h2>今日からできること</h2>
+    <h2>${esc(w.todayTitle || '今日からできること')}</h2>
     <ul class="today-list">
       ${w.today.map((t) => `<li>${esc(t)}</li>`).join('\n      ')}
     </ul>
@@ -399,7 +388,7 @@ ${headerHtml(root)}
       <img src="${root}assets/founder.jpg" alt="けい" width="64" height="64">
       <div>
         <p class="who">この記事を書いた人：けい</p>
-        <p>ネイルの仕事を15年続けています。私自身も、もともとは深爪＆噛み爪でした。<a href="${root}#about">プロフィールを見る</a></p>
+        <p>ネイル歴25年のネイリストです。私自身も、もともとは深爪＆噛み爪でした。<a href="${root}#about">プロフィールを見る</a></p>
       </div>
     </aside>
   </div>
@@ -428,126 +417,21 @@ ${footerHtml()}
 }
 
 // ===== トップページ =====
+// index.html は手で直した内容をそのまま残し、「お悩み一覧」(目印コメントの間)だけを作り直します
+const GRID_START = '<!-- お悩み一覧ここから(build.jsが自動で作ります) -->';
+const GRID_END = '<!-- お悩み一覧ここまで -->';
 function indexPage() {
   const root = '';
-  const url = `${SITE}/`;
-  const title = 'ネイルピタ | 40代50代の手元ケア習慣';
-  const desc = `爪の縦筋・横筋・二枚爪・薄い爪・ささくれ・手のしわ・手荒れ・深爪・噛み爪・巻き爪など、40代50代の爪と手のお悩みを${WORRIES.length}項目に分けて、原因と今日からできるケア、おすすめアイテムをネイリストが紹介します。`;
-  const ld = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: 'ネイルピタ',
-      url,
-      inLanguage: 'ja',
-      description: desc,
-    },
-  ];
-  const oldHashes = ['tatesuji', 'yokosuji', 'soriduma', 'nimaizume', 'sasakure', 'teshiwa', 'fukazume', 'makizume'];
-
   const groupsHtml = GROUPS.map(
     ([name, slugs]) => `<h3 class="group-title">${esc(name)}</h3>
     <div class="worry-grid">
       ${slugs.map((s) => worryCard(bySlug[s], root)).join('\n      ')}
     </div>`
   ).join('\n    ');
-
-  return `${headHtml({ title, desc, url, root, ld, verify: true }).replace(
-    '</head>',
-    `<script>
-// 以前の「ページ内リンク(#tatesuji など)」で来た人を、お悩みごとのページへ案内します
-(function () {
-  var ok = ${JSON.stringify(Object.fromEntries(oldHashes.map((h) => [h, 1])))};
-  var h = location.hash.replace('#', '');
-  if (ok[h]) { location.replace(h + '/'); }
-})();
-</script>
-</head>`
-  )}
-<body data-root="">
-
-${headerHtml(root)}
-
-<main>
-<section class="hero">
-  <div class="wrap">
-    <h1>40代・50代の爪と手のお悩み、<br class="sp">原因と今日からできるケア</h1>
-    <p>縦筋・二枚爪・手荒れ・深爪・巻き爪まで。${WORRIES.length}のお悩みをひとつずつ、ネイリストのけいが解説します。</p>
-  </div>
-</section>
-
-<section class="about" id="about">
-  <div class="wrap">
-    <div class="avatar-wrap">
-      <img src="assets/founder.jpg" alt="ネイリストのけい" width="200" height="200">
-    </div>
-    <div class="about-body">
-      <p class="eyebrow">はじめまして、けいです</p>
-
-      <p class="lead">はじめまして、けいです。<br>ネイルの仕事を15年続けています💅</p>
-
-      <p>実は私も、若いころは爪を噛む癖がやめられない深爪でした。人に手を見られるのが嫌で、手元に自信が持てなかった時期があります。</p>
-
-      <p>ネイリストになってから、爪のことを学び少しずつ爪のピンクの部分を伸ばしてお客様に驚かれたことをきっかけに、爪のお悩みを発信しています。<br>その経験から、爪の状態に合わせて必要な知識を学び続けています。</p>
-
-      <p>私はネイルサロンで施術していますが、たくさんの方が「ネイルサロンに行くのは勇気がいる」と思われているようです。<br>そんな方のために実際にネイルサロンで使ってよかったものや、口コミを調べて評価が高かったものを厳選してご紹介しています。<br>お家でも爪のケアにお役立てくださいね。</p>
-
-      <p>爪は1か月に約3ミリ伸びます。今日からの小さなケアが、数か月後の手元をつくります。「どれを選べばいい？」と迷ったら、是非参考にしてくださいね。</p>
-
-      <a href="#worries" class="cta-btn">お悩みから探す</a>
-    </div>
-  </div>
-</section>
-
-${lineCtaHtml()}
-
-<div class="banner">
-  <img src="assets/hand-care.jpg" alt="手元をいたわるハンドケアのイメージ">
-</div>
-
-<section class="worries-nav" id="worries">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">お悩み</span>
-      <h2>あなたの指先・足先、どのお悩みですか？</h2>
-    </div>
-    ${groupsHtml}
-  </div>
-</section>
-
-<section class="shokuba" id="shokuba">
-  <div class="wrap">
-    <div class="shokuba-intro">
-      <p class="eyebrow" style="text-align:center;">職場でバレたくない</p>
-      <h2 style="margin-bottom:14px;">派手にならず、きちんとケアしている指先へ</h2>
-      <p>「規定で派手な色はNG」「でもケアはちゃんとしたい」というお悩みは意外とよく聞きます。色を楽しむというより、爪の表面を整えて清潔感を出す発想に切り替えるのがコツ。ツヤを抑えたマット仕上げや、クリア系のベースコートだけの仕上げなら、派手にならずきちんとケアしている印象を残せます。</p>
-      <p>万一バレてもぺろっと剥がせるジェルネイルならチャレンジしやすいです。ベースジェルを塗布後カラージェル・トップジェルを塗るだけでジェルネイルが完成、工程ごとにネイルライトで固めるので乾かす手間もありません。</p>
-    </div>
-    <div class="items" id="items-shokuba"></div>
-    <p class="price-note">※価格・送料は掲載時点(2026年9〜10月)のものです。最新の情報は楽天のページでご確認ください。</p>
-  </div>
-</section>
-
-<section class="jelly-cta">
-  <div class="wrap">
-    <div class="jelly-card">
-      <p class="eyebrow">もっと本格的に楽しみたい方へ</p>
-      <h3>セルフジェルネイルに<br>チャレンジしてみる</h3>
-      <p>道具の選び方から、剥がせるジェルの塗り方4ステップ、バレにくい色選びまで。職場でバレずに楽しむセルフジェルネイルの手順を、写真付きでまとめました。</p>
-      <a href="https://nailpita.github.io/nailpita/" class="cta-btn">セルフジェルネイルの手順を見る →</a>
-    </div>
-  </div>
-</section>
-</main>
-
-${roomCtaHtml()}
-
-${footerHtml()}
-
-<script src="script.js"></script>
-</body>
-</html>
-`;
+  const a = INDEX_HTML.indexOf(GRID_START);
+  const b = INDEX_HTML.indexOf(GRID_END);
+  if (a < 0 || b < a) throw new Error('index.html にお悩み一覧の目印コメントが見つかりません');
+  return INDEX_HTML.slice(0, a + GRID_START.length) + '\n    ' + groupsHtml + '\n    ' + INDEX_HTML.slice(b);
 }
 
 // ===== sitemap.xml =====

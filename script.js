@@ -12,6 +12,9 @@ const USE_THUMB_FALLBACK = true;
 //   thumb : 画像のファイルの場所(@0_mall/ の次の部分)
 //   from  : true にすると「¥990〜」のように「〜」が付く
 //   pick  : true にすると「けいのイチオシ」の目印が付く
+//   rating/reviews : 楽天の評価と件数(書くと「★4.64(4,080件)」と表示)
+//   voice : 口コミのひとこと(書くとカードに表示)
+//   ※me/item がわからない商品は省略可(楽天の画像置き場の画像を直接表示します)
 const mk = (o) => {
   const thumbUrl = `https://thumbnail.image.rakuten.co.jp/@0_mall/${o.thumb}?_ex=400x400`;
   return {
@@ -20,8 +23,13 @@ const mk = (o) => {
     price: o.price,
     priceFrom: !!o.from,
     pick: !!o.pick,
+    rating: o.rating || '',
+    reviews: o.reviews || '',
+    voice: o.voice || '',
     url: `https://hb.afl.rakuten.co.jp/ichiba/${o.id}/?pc=${encodeURIComponent(`https://item.rakuten.co.jp/${o.path}/`)}&link_type=picttext`,
-    imageUrl: `https://hbb.afl.rakuten.co.jp/hgb/${o.id}/?me_id=${o.me}&item_id=${o.item}&pc=${encodeURIComponent(thumbUrl)}&s=400x400&t=picttext`,
+    imageUrl: o.me
+      ? `https://hbb.afl.rakuten.co.jp/hgb/${o.id}/?me_id=${o.me}&item_id=${o.item}&pc=${encodeURIComponent(thumbUrl)}&s=400x400&t=picttext`
+      : thumbUrl,
     thumbUrl,
   };
 };
@@ -130,6 +138,21 @@ const PICKS = {
          thumb: 'mikagami/cabinet/item01/2-2.jpg',
          name: '巻き爪用 爪切りニッパー 足用', label: '巻き爪用爪切り', price: 1690 }),
   ],
+  // ⑩ かかとのガサガサ(評価・件数は2026年10月31日時点)
+  kakato: [
+    mk({ id: '585d49df.a3324dd6.585d49e9.da7a211f', path: 'lorelife/b1905c-009',
+         thumb: 'lorelife/cabinet/beauty/009/imgrc0077981613.jpg',
+         name: 'Lefina かかとやすり(皮膚科医監修・楽天1位15冠)', label: 'かかとやすり', price: 1780,
+         rating: '4.64', reviews: '4,080', voice: '50代「裏表でやすりの細さが違うのがよい。丸洗いできる」' }),
+    mk({ id: '588f715c.f0e6e669.588f7164.5ca99903', path: 'otbj/sosu-064_sale',
+         thumb: 'otbj/cabinet/01928150/03133358/03541596/220916_pr2_1000.jpg',
+         name: 'フットピーリングパック ペロリン 2回分(日本製・履くだけ)', label: '履くだけ角質ケア', price: 1390,
+         rating: '4.31', reviews: '9,858', voice: '40代「年2回くらい使っている。むけている間はクリームをたっぷりつけて靴下を履く」' }),
+    mk({ id: '58f9a792.f962ff4a.58f9a793.c78506f3', path: 'llic/hot-cure',
+         thumb: 'llic/cabinet/item2/hot-cure4-1.jpg',
+         name: 'Hot-cure(ホットキュア) かかとケア靴下', label: 'かかとケア靴下', price: 2200,
+         rating: '4.71', reviews: '1,524', voice: '40代「かかとがしっとりして暖かい」。一方で「少しずれると、かかとの部分が足の裏に当たる」という声もあります。' }),
+  ],
 };
 
 // ⑧ 職場でバレたくない
@@ -215,6 +238,8 @@ function itemCardHtml(item) {
         ${item.label ? `<p class="item-tag">${esc(item.label)}</p>` : ''}
         <div class="item-name">${esc(item.name)}</div>
         <div class="item-price">${formatPrice(item.price, item.priceFrom)}</div>
+        ${item.rating ? `<p class="item-rating">★${esc(item.rating)}${item.reviews ? `(${esc(item.reviews)}件)` : ''}</p>` : ''}
+        ${item.voice ? `<p class="item-voice">${esc(item.voice)}</p>` : ''}
         <span class="item-cta">楽天で見る</span>
       </div>
     </a>
@@ -248,6 +273,7 @@ const PAGE_ITEMS = {
   fukazume:  { picks: [['fukazume', 0], ['fukazume', 2], ['nimaizume', 0]] },
   kamizume:  { picks: [['fukazume', 1], ['nimaizume', 0], ['fukazume', 2]] },
   makizume:  { picks: [['makizume', 0], ['makizume', 1], ['makizume', 2]] },
+  kakato:    { picks: [['kakato', 0], ['kakato', 1], ['kakato', 2]] },
 };
 
 async function init() {
