@@ -16,7 +16,8 @@ const UPDATED = '2026-10-30';
 const UPDATED_JP = '2026年10月30日';
 const OG_IMAGE = `${SITE}/assets/hand-care.jpg`;
 const ROOM_URL = 'https://room.rakuten.co.jp/room_ed10370aee/items';
-const GA_ID = 'G-RN1JQ474DS';
+const LINE_URL = 'https://lin.ee/P9Dp4kV';
+const GA_ID ='G-RN1JQ474DS';
 const GSC_VERIFY = 'fTiN5ONsfGfMuDdtScl3MJups67DtgfAXP_2-65v3HM';
 
 // ===== お悩みごとのアイコン(線画) =====
@@ -316,6 +317,20 @@ function roomCtaHtml() {
 </section>`;
 }
 
+function lineCtaHtml() {
+  return `<section class="line-cta">
+  <div class="wrap">
+    <div class="line-card">
+      <p class="eyebrow">爪のお悩み、ひとりで抱えていませんか？</p>
+      <h2>初回だけ無料で、公式LINEから相談できます</h2>
+      <p>「どれを選べばいい？」「このケアで合っている？」と迷ったときは、公式LINEで気軽にご相談ください。</p>
+      <a href="${LINE_URL}" class="line-btn" target="_blank" rel="noopener">公式LINEで相談する（初回無料）</a>
+      <p class="line-note">※痛み・腫れ・出血などがあるときは、医療機関へご相談ください。</p>
+    </div>
+  </div>
+</section>`;
+}
+
 function worryCard(w, root) {
   return `<a class="worry-card" href="${root}${w.slug}/">${ICONS[w.slug]}<span>${esc(w.label)}</span></a>`;
 }
@@ -389,6 +404,8 @@ ${headerHtml(root)}
     </aside>
   </div>
 </article>
+
+${lineCtaHtml()}
 
 <section class="other-worries">
   <div class="wrap">
@@ -481,6 +498,8 @@ ${headerHtml(root)}
     </div>
   </div>
 </section>
+
+${lineCtaHtml()}
 
 <div class="banner">
   <img src="assets/hand-care.jpg" alt="手元をいたわるハンドケアのイメージ">
