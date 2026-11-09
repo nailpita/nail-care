@@ -311,3 +311,31 @@ async function init() {
 }
 
 init();
+
+// ▼クリック計測(Googleアナリティクス)
+//   LINEのボタン → line_click / 楽天の商品 → rakuten_click / 楽天ROOMのボタン → room_click
+//   どのページから押されたかは page_slug(トップは top、ほかはページ名)で分かります。
+(function () {
+  function send(name, params) {
+    try { if (typeof gtag === 'function') gtag('event', name, params); } catch (e) { /* 計測に失敗してもページには影響しません */ }
+  }
+  function pageSlug() {
+    var parts = location.pathname.split('/').filter(function (p) { return p && p !== 'index.html'; });
+    var last = parts[parts.length - 1] || '';
+    return (!last || last === 'nail-care') ? 'top' : last;
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a') : null;
+    if (!a) return;
+    var base = { page_slug: pageSlug(), transport_type: 'beacon' };
+    if (a.classList.contains('line-btn')) {
+      send('line_click', base);
+    } else if (a.classList.contains('item-card')) {
+      var nameEl = a.querySelector('.item-name');
+      base.product_name = nameEl ? nameEl.textContent.trim().slice(0, 80) : '';
+      send('rakuten_click', base);
+    } else if (a.classList.contains('room-btn')) {
+      send('room_click', base);
+    }
+  }, true);
+})();
