@@ -36,7 +36,10 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchRakutenProducts(keyword, hits, retriesLeft = 2) {
+// 楽天APIが一時的に不調(503など)のときは、少し待って再試行します
+const RETRY_WAITS = [3000, 8000, 15000];
+
+async function fetchRakutenProducts(keyword, hits, attempt = 0) {
   const endpoint = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701';
   const paramsObj = {
     applicationId: APP_ID,
@@ -51,22 +54,34 @@ async function fetchRakutenProducts(keyword, hits, retriesLeft = 2) {
   const params = new URLSearchParams(paramsObj);
   const url = `${endpoint}?${params.toString()}`;
 
-  const { statusCode, body } = await undiciRequest(url, {
-    method: 'GET',
-    headers: {
-      'User-Agent': 'nailpita/1.0',
-      Origin: SITE_ORIGIN,
-      Referer: SITE_ORIGIN,
-      accessKey: ACCESS_KEY,
-    },
-  });
+  let statusCode, rawText;
+  try {
+    const res = await undiciRequest(url, {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'nailpita/1.0',
+        Origin: SITE_ORIGIN,
+        Referer: SITE_ORIGIN,
+        accessKey: ACCESS_KEY,
+      },
+    });
+    statusCode = res.statusCode;
+    rawText = await res.body.text();
+  } catch (err) {
+    // 通信自体が失敗した(タイムアウトなど)
+    if (attempt < RETRY_WAITS.length) {
+      console.log(`  通信エラー(${err.message})。${RETRY_WAITS[attempt] / 1000}秒待って再試行します`);
+      await sleep(RETRY_WAITS[attempt]);
+      return fetchRakutenProducts(keyword, hits, attempt + 1);
+    }
+    throw err;
+  }
 
-  const rawText = await body.text();
-
-  if (statusCode === 429 && retriesLeft > 0) {
-    console.log('  レート制限のため2秒待って再試行します');
-    await sleep(2000);
-    return fetchRakutenProducts(keyword, hits, retriesLeft - 1);
+  // 429(アクセス集中)と5xx(楽天側の一時的な不調)は再試行する
+  if ((statusCode === 429 || statusCode >= 500) && attempt < RETRY_WAITS.length) {
+    console.log(`  楽天APIが一時的に応答できません(HTTP ${statusCode})。${RETRY_WAITS[attempt] / 1000}秒待って再試行します`);
+    await sleep(RETRY_WAITS[attempt]);
+    return fetchRakutenProducts(keyword, hits, attempt + 1);
   }
 
   let data;
@@ -97,14 +112,27 @@ async function fetchRakutenProducts(keyword, hits, retriesLeft = 2) {
   });
 }
 
+// 前回の products.json(取得に失敗したカテゴリは、前回の商品をそのまま残すため)
+function loadPrevious() {
+  try {
+    const prev = JSON.parse(fs.readFileSync(OUTPUT_PATH, 'utf8'));
+    return (prev && prev.categories) || {};
+  } catch {
+    return {};
+  }
+}
+
 async function runBatch() {
   const categories = {};
-  let hasError = false;
+  const previous = loadPrevious();
+  let okCount = 0;
+  let errorCount = 0;
 
   for (const category of WORRY_CATEGORIES) {
     console.log(`--- 「${category.label}」を検索中 ---`);
     const merged = [];
     const seenNames = new Set();
+    let categoryFailed = false;
 
     for (const keyword of category.keywords) {
       console.log(`  キーワード:「${keyword}」`);
@@ -116,21 +144,41 @@ async function runBatch() {
             merged.push(item);
           }
         }
+        okCount++;
       } catch (err) {
         console.error(`  キーワード処理エラー(${keyword}): ${err.message}`);
-        hasError = true;
+        errorCount++;
+        categoryFailed = true;
       }
       await sleep(1000);
     }
 
-    categories[category.id] = merged.slice(0, 6);
-    console.log(`  → 合計${categories[category.id].length}件`);
+    const fresh = merged.slice(0, 6);
+    const prevItems = Array.isArray(previous[category.id]) ? previous[category.id] : [];
+    if (categoryFailed && fresh.length < prevItems.length) {
+      // 一部のキーワードが取れず件数が減ったときは、前回の商品を残す
+      categories[category.id] = prevItems;
+      console.log(`  → 取得できなかったキーワードがあるため、前回の${prevItems.length}件を残します`);
+    } else {
+      categories[category.id] = fresh;
+      console.log(`  → 合計${fresh.length}件`);
+    }
+  }
+
+  if (okCount === 0) {
+    // すべてのキーワードが失敗(APIキーの期限切れなど)。products.json は書き換えずに失敗として通知する
+    console.error('::error::楽天APIから1件も取得できませんでした。APIキーや楽天側の状況を確認してください');
+    process.exitCode = 1;
+    return;
   }
 
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), categories }, null, 2));
   console.log(`完了: ${OUTPUT_PATH} を更新しました`);
 
-  if (hasError) process.exitCode = 1;
+  if (errorCount > 0) {
+    // 一時的な不調で一部だけ取れなかった場合は、警告だけ出して成功扱いにする(前回の商品を残しているため)
+    console.log(`::warning::${errorCount}件のキーワードが取得できなかったため、該当カテゴリは前回の商品を残しました`);
+  }
 }
 
 runBatch();
